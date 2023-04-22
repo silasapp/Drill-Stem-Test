@@ -1,0 +1,167 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.Models.GeneralModel.MyApps>
+
+
+@{
+    ViewData["Title"] = "My Applications";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+    <div class="">
+
+        <div class="row" id="BackImage">
+
+            <br />
+            <h3 class="DashCompanyName"> My Application List </h3>
+            <hr />
+        </div>
+
+
+        <div class="table-responsive" id="MyAppsTableData">
+
+            <br />
+            <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:small">
+                <thead>
+                    <tr>
+                        <th> Ref No.</th>
+                        <th> Category </th>
+                        <th> Company Name </th>
+                        <th> Approved </th>
+                        <th> Report Submitted </th>
+                        <th> Status </th>
+                        <th> Date Applied </th>
+                        <th> Date Submitted </th>
+                        <th> Action </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+
+                        var status = a.Status == GeneralClass.DocumentsRequired ? "btn-primary" :
+                        a.Status == GeneralClass.Rejected ? "btn-danger" :
+                        a.Status == GeneralClass.DISAPPROVE ? "btn-danger" :
+                        a.Status == GeneralClass.PaymentPending ? "btn-info" :
+                        a.Status == GeneralClass.DocumentsUploaded ? "btn-primary" :
+                        a.Status == GeneralClass.Processing ? "btn-warning" :
+                        a.Status == GeneralClass.PaymentCompleted ? "btn-info" :
+                        a.Status == GeneralClass.Approved ? "btn-success" : "btn-secondary";
+
+                        var app_id = generalClass.Encrypt(a.AppID.ToString());
+                        var comp_id = generalClass.Encrypt(a.CompanyID.ToString());
+
+                        var proposedApproved = a.IsProposedApproved == true ? "YES" : "NO";
+                        var reportApproved = a.IsReportSubmitted == true ? "YES" : "NO";
+
+
+                        var colorA = a.IsProposedApproved == true ? "text-success" : "text-danger";
+                        var colorB = a.IsReportApproved == true ? "text-success" : "text-danger";
+
+
+                        <tr>
+                            <td class="text-danger"> <b>@a.RefNo</b> </td>
+                            <td> <small>@a.Category</small></td>
+                            <td><b>@a.CompanyName</b></td>
+                            
+                            <td> <b class="@colorA">@proposedApproved</b> </td>
+                            <td> <b class="@colorB">@reportApproved</b> </td>
+                            <td> <span class="btn @status btn-xs">  @a.Status </span> </td>
+                            <td> @a.DateApplied </td>
+                            <td> @a.DateSubmitted </td>
+                            <td>
+                                <div class="btn-group" role="group">
+
+                                    <a href="/CompanyApplication/ViewApp/@app_id" class="btn btn-xs btn-primary"> <i class="fa fa-eye"> </i> View </a> <p></p>
+
+                                    @{
+                                        if (a.IsProposedSubmitted == false)
+                                        {
+                                            if (a.Status == GeneralClass.DocumentsRequired)
+                                            {
+                                                <a href="/CompanyApplication/UploadDocument/@app_id" class="btn btn-xs btn-warning"> <i class="fa fa-file"> </i> Add Documents  </a><p></p>
+                                            }
+                                            else if (a.Status == GeneralClass.DocumentsUploaded)
+                                            {
+                                                <a href="/CompanyApplication/SubmitApplication/@app_id" class="btn btn-xs btn-warning"> <i class="fa fa-file"> </i> Submit Application  </a><p></p>
+                                            }
+                                            else if (a.Status == GeneralClass.PaymentPending)
+                                            {
+                                                <a href="/CompanyApplication/ApplicationPayment/@app_id" class="btn btn-xs btn-warning"> <i class="fa fa-money-bill-alt"> </i> Make Payment </a><p></p>
+                                            }
+                                            else if (a.Status == GeneralClass.PaymentCompleted)
+                                            {
+                                                <a href="/CompanyApplication/ApplicationPayment/@app_id" class="btn btn-xs btn-warning"> <i class="fa fa-money-bill-alt"> </i> Confirm Payment </a><p></p>
+                                            }
+                                            <button class="btn btn-xs btn-danger" onclick="DeleteApplication('@app_id')"> <i class="fa fa-trash-alt"> </i> Bin </button>
+
+                                            <p></p>
+
+                                            <a href="/CompanyApplication/EditApplication/@app_id" class="btn btn-xs btn-success"> <i class="fas fa-redo"></i> Edit </a>
+
+                                        }
+                                        else
+                                        {
+
+                                            if (a.IsProposedApproved == false && a.Status == GeneralClass.Rejected)
+                                            {
+                                                <a href="/CompanyApplication/ReUploadDocument/@app_id" class="btn btn-xs btn-danger"> <i class="fa fa-file"> </i> Resubmit Documents  </a><p></p>
+
+                                                <a href="/CompanyApplication/EditApplication/@app_id" class="btn btn-xs btn-success"> <i class="fas fa-redo"></i> Update Info </a>
+
+                                            }
+                                            else if (a.IsProposedApproved == false && (a.Status == GeneralClass.Rejected || a.Status == GeneralClass.Processing))
+                                            {
+                                                <a href="#" class="btn btn-xs btn-danger" onclick="WithdrawApp('@app_id')"> <i class="fas fa-backspace"></i> Withdraw App </a>
+                                            }
+                                            else if (a.IsProposedApproved == false && (a.Status == GeneralClass.Withdrawn))
+                                            {
+                                                <a href="#" class="btn btn-xs btn-warning" onclick="ResubmitApp('@app_id')"> <i class="far fa-share-square"></i> Resubmit App </a>
+                                            }
+                                            else if (a.IsProposedApproved == true && a.IsReportSubmitted == false)
+                                            {
+                                                <a href="/CompanyApplication/ReportDocument/@app_id" class="btn btn-xs btn-warning"> <i class="fa fa-file"> </i> Submit Report Document(s) </a><p></p>
+                                            }
+                                            else if (a.IsReportSubmitted == true && a.IsReportApproved == false && a.Status == GeneralClass.Rejected)
+                                            {
+                                                <a href="/CompanyApplication/ReportDocument/@app_id" class="btn btn-xs btn-danger"> <i class="fa fa-file"> </i> Re-Submit Report Document(s) </a><p></p>
+                                            }
+                                        }
+                                    }
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+<script>
+
+    function DeleteApplication(id) {
+
+        var msg = confirm("Are you sure you want to remove this application. Application has not been submitted yet.");
+
+        if (msg === true) {
+
+            $.post("/CompanyApplication/DeleteApplication", { "AppID": id }, function (response) {
+
+                if ($.trim(response) === "App Removed") {
+
+                    $("#MyAppsTableData").load(location.href + " #MyAppsTableData");
+                }
+                else {
+                    alert(response);
+                }
+
+            });
+        }
+    }
+
+</script>

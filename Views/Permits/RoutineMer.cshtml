@@ -1,0 +1,251 @@
+﻿@using DST.Helpers;
+@using DST.HelpersClass;
+@model IEnumerable<DST.Models.GeneralModel.PermitViewModel>;
+
+@{
+    ViewData["Title"] = ViewData["PermitDocumentName"];
+    Layout = null;
+    NumberToWordHelper numberToWord = new NumberToWordHelper();
+    int i = 0;
+
+    var half = "";
+
+    half = Model.FirstOrDefault().permitModels.FirstOrDefault().Month > 6 ? "Second Half" : "First Half";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+</head>
+<body style="">
+
+    <div style="padding:0px; color:black">
+
+        <div style="width:100%;" id="divPermitPreview">
+
+            <div class="text-center">
+
+
+                <div style="font-family: 'Arial Black'; font-weight: bold; line-height: 30px ">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:20%;">
+                                <img src="~/images/nuprc.png" alt="Logo" style="height: 150px; display: block; margin: 0 auto" />
+                            </td>
+                            <td style="width:75%;" valign="top">
+                                <div style="font-size:30px; font-weight:bold; color:forestgreen; margin-top:15px; margin-left:25px; line-height:37px">
+                                    NIGERIAN UPSTREAM PETROLEUM REGULATORY COMMISSION (NUPRC)
+                                </div>
+                                <br />
+                                <div style="font-family: Calibri; font-size: 13px; margin-left: 25px; font-weight: normal">
+                                    <span>No 7, Sylvester Ugoh Crescent Jabi, Abuja FCT | </span>
+                                    <span>PMB : 399 Garki, Abuja | </span>
+                                    <span>Phone : +234(0)9032000 | </span>
+                                    <span>Email : nuprc@nuprc.gov.ng | </span>
+                                    <span>Web : www.nuprc.gov.ng </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <p></p>
+
+                <div style="margin:0px 30px 0px 30px; padding:10px;" class="text-left">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:60%%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Ref. No:</p>
+                                    &nbsp;<span style="font-family: Calibri;"><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().PermitNO</b></span>
+                                </div>
+                            </td>
+                            <td style="width:40%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Date:</p>
+                                    &nbsp;<span style="font-family: Calibri;">@Model.FirstOrDefault().permitModels.FirstOrDefault().IssuedDate.ToString()</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <br />
+
+                    <div style="font-family:Candara; font-size:16px;">
+
+                        <div>The Managing Director,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyAddress,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyCity,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyState.</div>
+
+                        <br />
+
+                        <div>
+                            <sanp style="font-weight:bold; text-decoration:underline;">ROUTINE MAXIMUM EFFICIENT RATE (MER) TEST FOR @half.ToUpper() OF YEAR @Model.FirstOrDefault().permitModels.FirstOrDefault().Year </sanp>
+
+                            <p></p>
+
+                            <div style="line-height:40px; font-size:17px;">
+
+
+                                <p>
+                                    In compliance with the Provisions of Sections 38 and 43 of the Petroleum (Drilling & Production) Regulations, 1969 as amended, you are hereby requested to conduct Maximum Efficient Rate (MER) test on your producing wells and pools to enable the Department compute Technical Allowable Rates (TAR) for them.
+                                </p>
+
+
+                                <p>
+                                    You are required to submit your MER test Programme to the office of the Director/CEO, Nigerian Upstream Petroleum Regulator Commission within two (2) weeks from the date on this letter. Please note that MER test should be conducted on minimum of three (3) choke sizes for old wells and five (5) choke sizes for newly completed or worked-over wells in equal incremental steps.
+                                </p>
+
+                                <p>
+                                    The result(s) of the test duly certified by NUPRC nominee(s) should reach the office of the Director/CEO, Department Petroleum Resources, not later than <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().ExpiaryDate</b> in excel format, using the attached template.
+                                    In addition, you are required to upload the test result(s) on the National Production Monitoring System (NPMS) platform to enable digital MER test analysis.
+                                </p>
+
+                                <p>
+                                    Furthermore, evidence of payment of statutory fees made to the Federal Government of Nigeria Treasury Single Account (TSA) via the “Remita Platform”, for MER test per field and TAR must be included with your MER result(s) submission. This is in line with the Provisions of Section 59 (1) (uu) & (vv) of the Petroleum (Drilling and Production) (Amendment) Regulations, 2019.
+                                </p>
+
+                                <p>
+                                    Please note that failure to carry out MER test on your producing wells and pools, late or non-submission of MER test result(s), falsification of MER test result(s) and failure to upload MER test data on the NPMS platform will result in non-computation of TAR for your wells and would attract appropriate sanctions, in line with the extant regulations.
+                                </p>
+
+                                <p>
+                                    Also note that apart from wells with approved Allowable Rates for the <b>@half @Model.FirstOrDefault().permitModels.FirstOrDefault().Year</b> cycle, no other well should be opened or re-opened for production without approval from the Director/CEO, Nigerian Upstream Petroleum Regulator Commission.
+                                </p>
+
+
+                                <p>
+                                    The following NUPRC personnel will witness and validate the MER test result(s).
+                                </p>
+
+                                <table class="table table-responsive table-bordered" style="font-size:smaller">
+                                    <thead>
+                                        <tr>
+                                            <th>S/N</th>
+                                            <th>Name</th>
+                                            <th>Division</th>
+                                            <th>Location</th>
+                                            <th>Email Address</th>
+                                            <th>Contact No.</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @if (Model.FirstOrDefault().staffNominations.Any())
+                                        {
+                                            @foreach (var n in Model.FirstOrDefault().staffNominations)
+                                            {
+                                                i++;
+
+                                                <tr class="text-center">
+                                                    <td>@i</td>
+                                                    <td>@n.FullName</td>
+                                                    <td>@n.Division</td>
+                                                    <td>@n.FieldOffice</td>
+                                                    <td>@n.StaffEmail</td>
+                                                    <td>@n.Phone</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+
+
+                                @*<p>
+                            Please ensure you inform Zonal Operations Controller, Nigerian Upstream Petroleum Regulator Commission, &nbsp; <i>@Model.FirstOrDefault().ZoneName</i> &nbsp; of the actual date of test prior to commencement of the operation.
+                        </p>
+
+                        <p>
+                            We acknowledge receipt of your e-payment with Remita Retrieval Reference (RRR) Number &nbsp; <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().RRR</b> dated <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().DatePaid</b> for hundred thousand naira (N100,000.00) being processing fee for this permit.
+                        </p>*@
+
+                                <br />
+
+                                <table style="width: 100%; border-spacing: 0;">
+                                    <tr style="font-size:17px;">
+                                        <td style="width: 66.666%;" valign="top">
+                                            <div>
+                                                Yours faithfully,
+
+                                                <br />
+
+                                                <img src="~/images/Signature/@Model.FirstOrDefault().permitModels.FirstOrDefault().Signature" style="height: 70px;" />
+
+                                                <br />
+
+                                                <div style="line-height:30px; font-size:16px">
+                                                    <span><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().ApprovedBy</b></span>,
+                                                    <br />
+                                                    <span><b>For: Commission Chief Executive (CCE), (NUPRC)</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td style="width: 33.333%;" valign="top">
+                                            <div class="text-center">
+                                                <img style="height:90px" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.FirstOrDefault().permitModels.FirstOrDefault().QrCode))" />
+
+                                                <br />
+                                                <small style="font-size:12px">Scan to verify</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
+
+
+
+<style>
+
+    #List1 li {
+        display: inline-block;
+        text-align: left;
+    }
+
+    #divPermitPreview {
+        background: url("/images/nupp.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+</style>

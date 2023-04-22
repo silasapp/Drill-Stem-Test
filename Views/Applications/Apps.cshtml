@@ -1,0 +1,461 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.Models.GeneralModel.ApplicationDetailsModel>
+@using Microsoft.AspNetCore.Http;
+@using DST.Controllers.Authentications;
+
+
+@{
+    ViewData["Title"] = "View Application for : " + ViewData["AppRefNo"].ToString();
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    @foreach (var apps in Model)
+    {
+        foreach (var r in apps.applications)
+        {
+            var symbol = r.ShortName == GeneralClass.EEWT || r.ShortName == GeneralClass.NEWT ? "$" : "₦";
+
+            var companyemail = generalClass.Encrypt(r.CompanyEmail.ToString());
+            var appId = generalClass.Encrypt(r.AppId.ToString());
+
+            <div class="card-body">
+
+                
+
+                <div class="row">
+
+                    <div class="col-sm-5">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered table-striped" style="resize:vertical">
+                                <tbody>
+
+                                    <tr>
+                                        <td style="width:170px">Ref NO </td>
+                                        <td class="text-left text-primary"><b>@r.RefNo</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>View uploaded template </td>
+                                        <td class="text-left"><a class="btn btn-danger btn-sm" href="/Applications/ViewTemplate/@appId" target="_blank">View Template</a></td>
+                                    </tr>
+
+
+                                    @if (r.ShortName == GeneralClass.DST)
+                                    {
+                                        <tr>
+                                            <td>Is Approved</td>
+                                            <td class="text-left"><b>@r.ProposalApproved</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Is Report Approved</td>
+                                            <td class="text-left"><b>@r.ReportApproved</b></td>
+                                        </tr>
+                                    }
+
+                                    <tr>
+                                        <td class="">Company Name</td>
+                                        <td class="text-left">
+                                            <a class="text-primary" href="/Companies/FullCompanyProfile/@companyemail" target="_blank"><b> @r.CompanyName </b></a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Company Address</td>
+                                        <td class="text-left"> @r.CompanyAddress</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="">Company Email</td>
+                                        <td class="text-left">@r.CompanyEmail </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Stage</td>
+                                        <td class="text-left text-dark"><b style="font-size:13px">@r.Stage</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Status </td>
+
+                                        @{
+                                            var status =
+                                             r.Status == GeneralClass.Rejected ? "btn-danger" :
+
+                                             r.Status == GeneralClass.PaymentPending ? "btn-info" :
+                                             r.Status == GeneralClass.Processing ? "btn-warning" :
+                                             r.Status == GeneralClass.PaymentCompleted ? "btn-warning" :
+                                             r.Status == GeneralClass.Approved ? "btn-success" : "btn-secondary";
+                                        }
+                                        <td class="text-left"> <span class="btn @status btn-sm">  @r.Status </span> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="">Volume (bopd)</td>
+                                        <td class="text-left">@r.Volume </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="">Contractor Name</td>
+                                        <td class="text-left">@r.ContractorName </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="">Rig Name</td>
+                                        <td class="text-left">@r.RigName </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="">Rig Type</td>
+                                        <td class="text-left">@r.RigType </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Date Applied</td>
+                                        <td class="text-left"><b>@r.DateApplied</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Date Submitted</td>
+                                        <td class="text-left"><b>@r.DateSubmitted</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Payment RRR</td>
+                                        <td class="text-left text-info"><b>@r.RRR</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Transaction Type</td>
+                                        <td class="text-left text-danger"><b>@r.TransType</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Amount Paid </td>
+                                        <td class="text-left"> <span> @symbol@string.Format("{0:N}", r.AmountPaid) </span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td> Service Charge </td>
+                                        <td class="text-left"> <span> @symbol@string.Format("{0:N}", r.ServiceCharge) </span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td> Total Amount </td>
+                                        <td class="text-left">
+                                            <span>
+
+                                                @{
+                                                    var totalAmount = r.TotalAmount;
+                                                }
+
+                                                @symbol@string.Format("{0:N}", totalAmount)
+
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Trans. Description </td>
+                                        <td class="text-left"> <small>  @r.TransDescription </small> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Trans. Status </td>
+                                        <td class="text-left"> <span>  @r.TransStatus </span> </td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>Documents Attached</td>
+
+                                        <td class="text-left">
+
+                                            @foreach (var appDoc in apps.appDocuuments)
+                                            {
+                                                <a href="@appDoc.DocSource" target="_blank" style="color:darkslategrey; font-size:smaller">
+                                                    <div class="" style="border:1px solid #dadada; padding:10px; margin:2px; cursor:pointer" title="Click to view document">
+
+                                                        <i class="fas fa-file-alt fa-lg text-info"> </i>&nbsp;
+
+                                                        <b> @appDoc.DocName  </b>
+
+                                                    </div>
+                                                </a>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                            <br />
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="col-sm-4">
+
+                        <div>
+
+                            <div class="card-black">
+                                <h4> <b>Current Desk</b> </h4>
+                                <hr />
+
+                                @if (Model.FirstOrDefault().applications.FirstOrDefault().Status != GeneralClass.Processing)
+                                {
+                                    <b class="text-primary"> COMPANY </b>
+                                }
+                                else
+                                {
+                                    <b class="text-primary"> @Model.FirstOrDefault().currentDesks.FirstOrDefault().Staff </b>
+                                }
+                            </div>
+
+
+                            <br />
+
+
+                            @{
+                                var commentList = apps.histories.Where(x => x.Comment.Contains("=>"));
+                                var lastComment = commentList.Count() <= 0 ? "" : commentList.FirstOrDefault().Comment;
+
+                                var backgroundC = "";
+                            }
+
+                            @if (r.Status == GeneralClass.Rejected)
+                            {
+                                backgroundC = "background-color:lightcoral; padding:10px; color:white; line-height:30px";
+                            }
+                            else if (r.Status == GeneralClass.Approved)
+                            {
+                                backgroundC = "background-color:mediumseagreen;padding:10px; color:white; line-height:30px";
+                            }
+                            else
+                            {
+                                backgroundC = "background-color:darkslateblue;padding:10px; color:white; line-height:30px";
+                            }
+
+
+
+                            <div class="card-black ">
+                                <h4> <b>Last Comment</b> </h4>
+                                <hr />
+
+                                <div style="@backgroundC">
+
+                                    <b> @lastComment</b>
+
+                                </div>
+                            </div>
+
+
+                            <br />
+
+
+
+
+                            <div class="table-responsive card-black">
+                                <h4 class=""><b>Last 3 Application History</b></h4>
+
+                                <table class="table table-bordered table-striped">
+                                    <caption> <a href="/Applications/ApplicationHistory/@generalClass.Encrypt(r.AppId.ToString())" class="text-primary" target="_blank" title="Click to view application history"> See more </a> </caption>
+                                    <thead>
+
+                                        <tr class="">
+                                            <td>Date</td>
+                                            <td>Comment</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var his in apps.histories)
+                                        {
+                                            <tr>
+                                                <td> @his.HistoryDate  </td>
+                                                <td class="text-left"> <small>Action From : @his.ActionFrom  - - </small> <b style="color:saddlebrown"> @his.Comment </b>  <small>. - - Action To : @his.ActionTo</small></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br />
+
+
+                            <div class="card-black">
+
+                                <h4> <b>Application Reports</b> </h4>
+
+                                <hr />
+
+                                <div id="divReport">
+                                    @foreach (var appReport in apps.appReports)
+                                    {
+                                        <div style="margin-top:10px; padding:10px; border:1px solid #d7d4d4">
+
+                                            <p class=""><b>@appReport.Subject</b></p>
+                                            <hr />
+
+                                            <p class="text-danger"> <a href="/Applications/ViewReport/@generalClass.Encrypt(appReport.ReportID.ToString())" target="_blank"><b>Click to view @appReport.Staff report </b></a></p>
+
+                                            <p> <b class="">Created At : </b> @appReport.CreatedAt</p>
+
+                                        </div>
+                                        <hr />
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-3">
+
+                        <div class="card-black">
+
+                            <h4> <b>Nomination Request</b> </h4>
+
+                            <hr />
+
+                            <div id="divNominatedStaff">
+                                @foreach (var n in apps.NominationRequest.ToList())
+                                {
+                                    <div style="margin-top:10px;">
+
+                                        <p class="text-info"> <b> Sent To : @n.Staff </b></p>
+                                        <p class="text-danger"> <b>Nomination done - @n.hasDone</b></p>
+                                        <p><b> Comment :</b> <small>@n.Comment</small></p>
+                                        <hr />
+                                        <p> Created At : @n.CreatedAt</p>
+                                        <p> Reminded At : @n.ReminderedAt</p>
+                                        <p> Update At : @n.UpdatedAt</p>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <div class="card-black">
+
+                            <h4> <b>Nominated Staff</b> </h4>
+
+                            <hr />
+
+                            <div id="divNominatedStaff">
+                                @foreach (var n in apps.nominations)
+                                {
+                                    <div style="margin-top:10px;">
+
+                                        <p class="text-info"> <b> @n.StaffName - @n.UserRoles </b></p>
+
+                                        @if (apps.applications.FirstOrDefault().Status == GeneralClass.Approved)
+                                        {
+                                            <a class="btn btn-danger btn-sm" href="/Permits/ViewLetter/@generalClass.Encrypt(n.AppId.ToString())/_view" target="_blank"> <i class="ti-files"> </i> View Letter </a>
+                                            <a class="btn btn-warning btn-sm" href="/Applications/ViewNominationReport/@generalClass.Encrypt(n.NominationID.ToString())" target="_blank"> <i class="fa fa-file"> </i> View Report </a>
+                                        }
+                                    </div>
+                                    <hr />
+                                }
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <div id="divSchdules">
+                            @foreach (var appSchdule in apps.appSchdules)
+                            {
+                                var startDate = DateTime.Parse(appSchdule.CreatedAt);
+                                var expDate = startDate.AddDays(3);
+
+                                <div class="card-black ">
+
+                                    <h4 class=""> <b>Schedule(s)</b> </h4>
+                                    <hr />
+
+                                    <div id="divSchdule">
+
+                                        <div style="border:1px solid #dadada; padding:10px; margin-top:10px;">
+
+                                            <small>
+                                                <p> By : <b>@appSchdule.SchduleByEmail</b></p>
+                                                <p> Type : <b>@appSchdule.SchduleType</b></p>
+                                                <p> Location : <b>@appSchdule.SchduleLocation</b></p>
+                                                <p> Schedule Date : <b class="text-danger">@appSchdule.SchduleDate</b></p>
+                                                <p> Comment : <b class="text-success">@appSchdule.SchduleComment</b></p>
+
+                                                @if (DateTime.Now > expDate)
+                                                {
+                                                    <p> Expired Status:<b class="text-danger"> Expired </b></p>
+                                                }
+                                                else
+                                                {
+                                                    <p> Expired Status: <b>Still Valid</b></p>
+                                                }
+
+                                                <p> Manger Response : <b class="text-primary">@appSchdule.sResponse</b></p>
+                                                <p> Manger Comment : <b class="text-success">@appSchdule.SupervisorComment</b></p>
+                                                <p> Company Response : <b class="text-primary">@appSchdule.cResponse</b></p>
+                                                <p> Company Comment : <b class="text-warning">@appSchdule.CustomerComment</b></p>
+
+                                                <hr />
+                                                <p> Created At : @appSchdule.CreatedAt</p>
+                                                <p> Updated At : @appSchdule.UpdatedAt</p>
+
+                                            </small>
+
+                                            <br />
+
+
+                                            @if (DateTime.Now > expDate)
+                                            {
+                                                <b class="text-danger"> Schdule has expired </b>
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </div>
+
+                        <br />
+
+                       
+
+
+                    </div>
+
+                </div>
+
+                <p><br /></p>
+
+            </div>
+        }
+    }
+
+</div>
+
+
+
+
+
+

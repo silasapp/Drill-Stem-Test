@@ -1,0 +1,90 @@
+﻿
+
+@using DST.Helpers;
+@model IEnumerable<DST.RecycleModels.RecycleSchedule>;
+
+@{
+    ViewData["Title"] = "Deleted Schedules";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:x-small">
+
+
+            <thead>
+                <tr>
+                    <th>Schedule By</th>
+                    <th>Schedule Date</th>
+                    <th>Comment</th>
+                    <th>Schedule Type</th>
+                    <th>Schedule Location</th>
+                    <th>Created At</th>
+                    <th>Deleted Status</th>
+                    <th>Deleted By</th>
+                    <th>Deleted At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var a in Model)
+                    {
+                        var deleted = a.DeletedStatus == true ? "Deleted" : "Active";
+                        var id = generalClass.Encrypt(a.ID.ToString());
+
+                        <tr>
+                            <td>  @a.CreatedBy </td>
+                            <td>  @a.ScheduleDate.ToLongDateString() </td>
+                            <td>  @a.Comment </td>
+                            <td>  @a.SchduleType </td>
+                            <td>  @a.SchduleLocation </td>
+                            <td>  @a.CreatedAt.ToLongDateString() </td>
+                            <td>  @deleted </td>
+                            <td>  @a.DeletedBy </td>
+                            <td>  @a.DeletedAt </td>
+                            <td>
+                                <a href="~/Schedules/ViewSchedule/@id" target="_blank" class="btn btn-sm btn-primary"> <i class="fa fa-eye"> </i> View</a>
+                                <button class="btn btn-sm btn-success" onclick="RestoreSchedule('@id')"><i class="fas fa-recycle"> </i> Restore</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+<script>
+
+    function RestoreSchedule(id) {
+        var msg = confirm("Are you sure you want to restore this deleted entry?");
+
+        if (msg === true) {
+            $.post("/Recyclebin/RestoreSchedule", { "id": id }, function (response) {
+
+                if ($.trim(response) === "Restored") {
+                    alert("Schedule successfully restored");
+                    location.reload(true);
+                }
+                else {
+                    alert(Response);
+                }
+
+            });
+        }
+    }
+</script>

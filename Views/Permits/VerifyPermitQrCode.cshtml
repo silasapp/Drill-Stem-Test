@@ -1,0 +1,62 @@
+﻿@using DST.Helpers;
+@model IEnumerable<DST.Models.GeneralModel.PermitModel>;
+
+@{
+    ViewData["Title"] = "Verify Permit QR Code";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<body>
+
+
+    <br />
+
+
+    <div class="container">
+
+        <div style="max-width:850px; border: 1px solid #ededed; padding:20px" class="text-left">
+
+            <div class="alert-info" style="padding:20px">
+
+                <h5 class="text-success"><b>@Model.FirstOrDefault().PermitNO Verified</b></h5>
+
+                <hr />
+
+                <div>
+                    <p><b>Type : </b>  DRILL STEM TEST APPROVAL </p>
+
+                    <hr />
+
+                    <p><b>Company Identification Code : </b> @Model.FirstOrDefault().CompanyCode</p>
+                    <p><b>Company Details : </b> @Model.FirstOrDefault().MyCompanyDetails</p>
+                    <p><b>Ref Number : </b> @Model.FirstOrDefault().RefNo</p>
+                    <p><b>Permit No : </b> @Model.FirstOrDefault().PermitNO</p>
+                   
+                    <hr />
+
+                    <p><b>Permit Number : </b> @Model.FirstOrDefault().PermitNO</p>
+                    <p><b>Status : </b> @Model.FirstOrDefault().Status</p>
+                    <p><b>Issued Date : </b> @Model.FirstOrDefault().IssuedDate</p>
+                    <p><b>Expiry Date : </b> @Model.FirstOrDefault().ExpiaryDate</p>
+                    <p><b>Submitted Date : </b> @Model.FirstOrDefault().DateSubmitted.ToString()</p>
+
+                    <hr />
+
+                    <p><b>RRR : </b> @Model.FirstOrDefault().RRR</p>
+                    <p><b>Total Amount : </b> @Model.FirstOrDefault().TotalAmount</p>
+                    <p><b>Payment Description : </b> @Model.FirstOrDefault().PayDescriiption</p>
+
+                    <hr />
+
+                    <p><b> Well Details : </b> @Model.FirstOrDefault().WellDetails</p>
+                    
+                   
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>s

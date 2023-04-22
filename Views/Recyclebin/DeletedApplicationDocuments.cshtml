@@ -1,0 +1,77 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.RecycleModels.RecycleAppDocs>
+
+@{
+    ViewData["Title"] = "Deleted Application Documents";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover " id="MyAppsTable" style="font-size:x-small">
+
+            <thead>
+                <tr>
+                    <th> Document Name </th>
+                    <th> Document Type</th>
+                    <th> Created At</th>
+                    <th> Deleted Status</th>
+                    <th> Deleted By</th>
+                    <th> Deleted At</th>
+                    <th> Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    var delStatus = m._appDocs.DeleteStatus == true ? "Deleted" : "Still Active";
+
+                    <tr>
+                        <td>@m._appDocs.DocName</td>
+                        <td>@m._appDocs.DocType</td>
+                        <td>@m._appDocs.CreatedAt.ToLongTimeString()</td>
+                        <td>@delStatus</td>
+                        <td>@m._staffs.FirstName @m._staffs.LastName</td>
+                        <td>@m._appDocs.DeletedAt.ToString()</td>
+                        <td> <button class="btn btn-sm btn-success" onclick="RestoreDoc('@generalClass.Encrypt(m._appDocs.AppDocId.ToString())')"><i class="fas fa-recycle"> </i> Restore</button> </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+    function RestoreDoc(id) {
+        var msg = confirm("Are you sure you want to restore this deleted entry?");
+
+        if (msg === true) {
+            $.post("/Recyclebin/RestorAppDoc", { "AppDocID": id }, function (response) {
+
+                if ($.trim(response) === "Restored") {
+                    alert("Application document successfully restored");
+                    location.reload(true);
+                }
+                else {
+                    alert(Response);
+                }
+
+            });
+        }
+    }
+
+</script>
+
+

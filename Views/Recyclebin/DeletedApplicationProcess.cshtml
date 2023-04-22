@@ -1,0 +1,98 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.RecycleModels.RecycleAppProcess>
+
+@{
+    ViewData["Title"] = "Deleted Application Process";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover " id="MyAppsTable" style="font-size:x-small">
+
+            <thead>
+                <tr>
+                    <th>App Link</th>
+                    <th>Role</th>
+                    <th>Location</th>
+                    <th>Sort</th>
+                    <th>Process</th>
+                    <th>Can Accept</th>
+                    <th>Can Reject</th>
+                    <th>Can Push</th>
+                    <th>Can Work</th>
+                    <th>Can Inspect</th>
+                    <th>Can Schdule</th>
+                    <th>Can Report</th>
+                    <th>On Accept</th>
+                    <th>On Reject</th>
+                    <th>CreatedAt</th>
+                    <th>Deleted By</th>
+                    <th>Deleted At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    var delStatus = m.DeleteStatus == true ? "Deleted" : "Still Active";
+
+                    <tr>
+                        <td>@m.LinkName</td>
+                        <td>@m.RoleName</td>
+                        <td>@m.LocationName</td>
+                        <td>@m.Sort</td>
+                        <td>@m.Process</td>
+                        <td>@m.CanAccept</td>
+                        <td>@m.CanReject</td>
+                        <td>@m.CanPush</td>
+                        <td>@m.CanWork</td>
+                        <td>@m.CanInspect</td>
+                        <td>@m.CanSchdule</td>
+                        <td>@m.CanReport</td>
+                        <td>@m.AcceptRole</td>
+                        <td>@m.RejectRole</td>
+                        <td>@m.CreatedAt.ToString()</td>
+                        <td>@m.DeletedBy</td>
+                        <td>@m.DeletedAt.ToString()</td>
+                        <td> <button class="btn btn-sm btn-success" onclick="RestoreProcess('@generalClass.Encrypt(m.ProcessID.ToString())')"><i class="fas fa-recycle"> </i> Restore</button> </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+    function RestoreProcess(id) {
+        var msg = confirm("Are you sure you want to restore this deleted entry?");
+
+        if (msg === true) {
+            $.post("/Recyclebin/RestoreProcess", { "id": id }, function (response) {
+
+                if ($.trim(response) === "Restored") {
+                    alert("Application process successfully restored");
+                    location.reload(true);
+                }
+                else {
+                    alert(Response);
+                }
+
+            });
+        }
+    }
+
+</script>
+

@@ -1,0 +1,113 @@
+﻿@using DST.Helpers;
+@using DST.Controllers.Authentications;
+@using Microsoft.AspNetCore.Http;
+@model IEnumerable<DST.Models.GeneralModel.MyPermit>
+
+@{
+    ViewData["Title"] = ViewData["ClassifyPermits"];
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+
+<h1>
+    @ViewData["ClassifyPermits"].ToString()
+</h1>
+
+<br />
+
+<div class="card-black">
+
+    <br />
+
+    <table class="table table-bordered table-hover" id="MyFacilityTable" style="font-size:small">
+        <thead>
+            <tr>
+                <th> Permit NO</th>
+                <th> App. Ref. NO. </th>
+                <th> Company </th>
+                <th> Well Details </th>
+                <th> Stage </th>
+                <th> Issue Date </th>
+                <th> Expiry Date </th>
+                <th> Print Status </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.Any())
+            {
+                foreach (var a in Model)
+                {
+                    var status = a.isPrinted == true ? "Printed" : "Not Printed";
+
+                    var permitID = generalClass.Encrypt(a.PermitID.ToString());
+
+
+                    var exDate = DateTime.Parse(a.ExpireDate.ToString());
+
+                    <tr>
+                        <td> <b class="text-primary">@a.PermitNo</b> @*<b class="text-danger">@a.isLegacy</b>*@</td>
+                        <td> <b>@a.RefNo</b></td>
+                        <td> <a class="" href="/Company/FullCompanyProfile/@generalClass.Encrypt(a.CompanyEmail)" target="_blank"> <b>@a.CompanyName</b></a></td>
+                        <td> @a.WellDetails</td>
+                        <td> @a.Category</td>
+                        <td> @a.IssuedDate.ToString("MMMM dd, yyyy") </td>
+                        <td>
+                            @a.ExpireDate.ToString("MMMM dd, yyyy")
+
+                            @if (DateTime.Now > exDate)
+                            {
+                                <br />
+                                <b class="text-danger"> Expired Permit </b>
+                            }
+                        </td>
+                        <td> @status </td>
+                        <td>
+                            <div class="btn-group" role="group">
+
+                                @if (a.ShortName == GeneralClass.DST)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/ViewPermit/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/ViewPermit/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+                                }
+                                else if (a.ShortName == GeneralClass.EEWT || a.ShortName == GeneralClass.NEWT)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/EWT/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/EWT/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+
+                                }
+                                else if (a.ShortName == GeneralClass.RMER)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/RoutineMer/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/RoutineMer/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+                                }
+                                else if (a.ShortName == GeneralClass.OCMER)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/OffCycleMer/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/OffCycleMer/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+
+                                }
+                                else if (a.ShortName == GeneralClass.RTAR || a.ShortName == GeneralClass.TARR)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/RoutineTAR/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/RoutineTAR/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+                                }
+                                else if (a.ShortName == GeneralClass.OTAR)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="/Permits/OffCycleTar/@permitID/_view" target="_blank"> <i class="fa fa-eye"> </i> View Approval</a>
+                                    <a class="btn btn-warning btn-sm" href="/Permits/OffCycleTar/@permitID/_download" target="_blank"> <i class="fa fa-file-download"> </i> Download Approval </a>
+
+                                }
+
+                                <a class="btn btn-dark btn-sm" href="/Permits/ViewHistory/@permitID" target="_blank"> <i class="fas fa-history"></i> History </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>

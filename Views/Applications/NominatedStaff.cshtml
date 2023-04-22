@@ -1,0 +1,75 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.Models.GeneralModel.NominatedList>
+
+@{
+    ViewData["Title"] = "Submit Report Finidings";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+
+<div class="card-black">
+
+    <br />
+
+    <table class="table table-bordered table-hover" id="MyFacilityTable">
+        <thead>
+            <tr>
+                <th> Company Name</th>
+                <th> Ref No.</th>
+                <th> Well Details </th>
+                <th> Staff Name </th>
+                <th> Has Submitted Report </th>
+                <th> Created At </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                var status = a.hasSubmitted == true ? "YES" : "NO";
+
+                var nominationid = generalClass.Encrypt(a.NominationID.ToString());
+                var appid = generalClass.Encrypt(a.AppID.ToString());
+
+
+                <tr>
+                    <td> <b>@a.CompanyName</b></td>
+                    <td>@a.AppRef</td>
+                    <td> @a.WellDetails</td>
+                    <td> @a.StaffName</td>
+                    <td> @status</td>
+                    <td> @a.CreatedAt.ToString("MMMM dd, yyyy") </td>
+                    <td>
+                        <div class="btn-group" role="group">
+
+                            <a class="btn btn-primary btn-sm" href="/Applications/Apps/@appid"> <i class="fa fa-file"> </i> View App </a>
+
+                            @if (a.hasSubmitted == false)
+                            {
+                                <a class="btn btn-warning btn-sm" href="/Applications/AddReport/@nominationid"> <i class="fa fa-file"> </i> Add Report </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-dark btn-sm" href="/Applications/EditNominationReport/@nominationid"> <i class="fa fa-file"> </i> Edit Report </a>
+                            }
+                        
+                            <a class="btn btn-facebook btn-sm" href="/Permits/ViewLetter/@appid/_view" target="_blank"> <i class="ti-files"> </i> View Letter </a>
+                            
+                        </div>
+                    </td>
+                </tr>
+                @*}*@
+
+            }
+
+        </tbody>
+    </table>
+
+
+</div>
+

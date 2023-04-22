@@ -1,0 +1,95 @@
+﻿@model IEnumerable<DST.Models.GeneralModel.PresentDocuments>
+
+@{
+    ViewData["Title"] = ViewData["CompanyName"];
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div>
+
+    <div class="row" id="BackImage">
+
+        <br />
+        <h3 class="DashCompanyName"> @ViewData["Title"] </h3>
+        <hr />
+    </div>
+
+    <br />
+
+    @if (Model == null)
+    {
+        <div class="alert alert-danger"> <b> A Network related problem occured. Please check your network and try again </b></div>
+    }
+    else
+    {
+        <br />
+
+        <table class="table table-bordered table-hover table-striped" id="MyFacilityTable" style="font-size:smaller">
+            <thead>
+                <tr>
+
+                    <th> Document Name</th>
+                    <th> File Name <p class="text-danger">(Last Updated)</p> </th>
+                    <th> File </th>
+                    <th> Doc Type </th>
+                    <th> Status </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    var imgs = "";
+
+                    if (a.Source.Contains("democontent") == true)
+                    {
+                        imgs = a.Source.Replace("democontent", "content");
+                    }
+                    else
+                    {
+                        imgs = a.Source;
+                    }
+
+
+                    var present = a.Present == true ? "Avialable" : "Not Avialabe";
+
+                    var file_icon = "";
+                    var font_png_icon = "fa-file-image text-warning";
+                    var font_pdf_icon = "fa-file-pdf text-danger";
+
+                    var font_file_icon = "fa-file text-info";
+
+                    var img_link = imgs;
+
+                    file_icon = a.Source.EndsWith(".png") == true ? font_png_icon :
+                           a.Source.EndsWith(".PNG") == true ? font_png_icon :
+                           a.Source.EndsWith(".jpg") == true ? font_png_icon :
+                           a.Source.EndsWith(".JPG") == true ? font_png_icon :
+                           a.Source.EndsWith(".jpeg") == true ? font_png_icon :
+                           a.Source.EndsWith(".JPEG") == true ? font_png_icon :
+                           a.Source.EndsWith(".pdf") == true ? font_pdf_icon :
+                           a.Source.EndsWith(".PDF") == true ? font_pdf_icon : font_file_icon;
+
+                    <tr>
+                        <td> <span> @a.TypeName</span></td>
+                        <td>@a.FileName</td>
+                        <td>
+                            <a href="@img_link" target="_blank" style="color:black" title="Click to view document">
+                                <i class="fa @file_icon fa-5x"></i>
+                            </a>
+                        </td>
+                        <td>@a.DocType <br> Document</td>
+                        <td>@present</td>
+
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="@img_link" target="_blank"> <i class="fa fa-eye"> </i> View </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+
+
+</div>

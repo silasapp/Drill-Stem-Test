@@ -1,0 +1,284 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.Models.GeneralModel.ApplicationDetailsModel>
+@using Microsoft.AspNetCore.Http;
+@using DST.Controllers.Authentications;
+
+
+@{
+    ViewData["Title"] = "View Application for " + ViewData["AppRefNo"].ToString();
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+
+}
+
+<div>
+
+    <div class="row" id="BackImage">
+
+        <br />
+        <h3 class="DashCompanyName">@ViewData["Title"] </h3>
+        <hr />
+    </div>
+
+    <br />
+
+
+    <div>
+
+        @foreach (var apps in Model)
+        {
+            foreach (var r in apps.applications)
+            {
+                var symbol = r.ShortName == GeneralClass.EEWT || r.ShortName == GeneralClass.NEWT ? "$" : "₦";
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-sm-12">
+
+                            <h5><span class="text-danger">Application Details for : <b class="text-primary">@r.RefNo </b></span></h5>
+
+                            <hr />
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <div class="col-sm-5">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-striped" style="resize:vertical; font-size:small">
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:150px">Ref NO </td>
+                                            <td class="text-left text-primary"><b>@r.RefNo</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Stage</td>
+                                            <td class="text-left text-dark"><small><b>@r.Stage</b></small></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="">Company Details</td>
+                                            <td class="text-left">
+                                                <b class="text-primary"> @r.CompanyName </b> <span><small>(@r.CompanyAddress)</small></span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="">Company Email</td>
+                                            <td class="text-left">@r.CompanyEmail </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Is Approved</td>
+                                            <td class="text-left"><b>@r.ProposalApproved</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Is Report Approved</td>
+                                            <td class="text-left"><b>@r.ReportApproved</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td> Status </td>
+
+                                            @{
+                                                var status =
+                                                 r.Status == GeneralClass.Rejected ? "btn-danger" :
+                                                 r.Status == GeneralClass.PaymentPending ? "btn-info" :
+                                                 r.Status == GeneralClass.Processing ? "btn-warning" :
+                                                 r.Status == GeneralClass.PaymentCompleted ? "btn-warning" :
+                                                 r.Status == GeneralClass.Approved ? "btn-success" : "btn-secondary";
+                                            }
+                                            <td class="text-left"> <span class="btn @status btn-xs">  @r.Status </span> </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td class="">Contractor Name</td>
+                                            <td class="text-left">@r.ContractorName </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="">Rig Name</td>
+                                            <td class="text-left">@r.RigName </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="">Rig Type</td>
+                                            <td class="text-left">@r.RigType </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Date Applied</td>
+                                            <td class="text-left"><b>@r.DateApplied</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Date Submitted</td>
+                                            <td class="text-left"><b>@r.DateSubmitted</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Payment RRR</td>
+                                            <td class="text-left text-info"><b>@r.RRR</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td> Trans. Status </td>
+                                            <td class="text-left"> <b class="text-info">  @r.TransStatus </b> </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Transaction Type</td>
+                                            <td class="text-left text-danger"><b>@r.TransType</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td> Amount Paid </td>
+                                            <td class="text-left"> <span> @symbol@string.Format("{0:N}", r.AmountPaid) </span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> Service Charge </td>
+                                            <td class="text-left"> <span> @symbol@string.Format("{0:N}", r.ServiceCharge) </span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> Total Amount </td>
+                                            <td class="text-left">
+                                                <span>
+
+                                                    @{
+                                                        var totalAmount = r.TotalAmount;
+                                                    }
+
+                                                    @symbol@string.Format("{0:N}", totalAmount)
+
+                                                </span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td> Trans. Description </td>
+                                            <td class="text-left"> <small>  @r.TransDescription </small> </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-sm-7">
+
+                            <div>
+
+                                <div class="table-responsive">
+                                    <b class="text-danger">Documents Attached</b>
+                                    <hr />
+
+                                    <table class="table table-bordered">
+
+                                        <tbody>
+                                            @foreach (var appDoc in apps.appDocuuments)
+                                            {
+                                                <tr>
+                                                    <td class="text-left">
+
+                                                        <a href="@appDoc.DocSource" target="_blank" style="color:darkslategrey; font-size:smaller">
+                                                            <div class="" style="border:1px solid #dadada; padding:10px; margin:2px; cursor:pointer" title="Click to view document">
+
+                                                                <i class="fas fa-file-alt fa-lg text-info"> </i>&nbsp;
+
+                                                                <b> @appDoc.DocName  </b>
+
+                                                            </div>
+                                                        </a>
+
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <br /><br />
+
+
+                                <div class="table-responsive">
+                                    <b class="text-danger">Uploaded Excel File</b>
+                                    <hr />
+
+                                    <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:11px">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Block (Oml/Opl)</th>
+                                                <th>Field Name</th>
+                                                <th>Reservior</th>
+                                                <th>WellName</th>
+                                                <th>String</th>
+                                                <th>Terrian </th>
+                                                <th>Expected/Proposed Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Fluid Type</th>
+                                                <th>Drive Mechanism</th>
+                                                <th>CreatedAt</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            @foreach (var a in apps.templates)
+                                            {
+                                                <tr class="">
+                                                    <td>@a.OmlOpl</td>
+                                                    <td> @a.FieldName</td>
+                                                    <td> @a.Reservior</td>
+                                                    <td> @a.WellName</td>
+                                                    <td> @a.String </td>
+                                                    <td> @a.Terrian </td>
+                                                    <td> @a.StartDate </td>
+                                                    <td> @a.EndDate </td>
+                                                    <td>@a.FluidType</td>
+                                                    <td>@a.DriveMechanism</td>
+                                                    <td> @a.CreatedAt </td>   
+                                                </tr>
+                                            }
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                                <br />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <p><br /></p>
+
+                </div>
+            }
+        }
+
+    </div>
+
+</div>
+
+
+

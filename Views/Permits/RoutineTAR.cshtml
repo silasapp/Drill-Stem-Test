@@ -1,0 +1,187 @@
+﻿@using DST.Helpers;
+@using DST.HelpersClass;
+@model IEnumerable<DST.Models.GeneralModel.PermitViewModel>;
+
+@{
+    ViewData["Title"] = ViewData["PermitDocumentName"];
+    Layout = null;
+    NumberToWordHelper numberToWord = new NumberToWordHelper();
+    int i = 0;
+
+    var half = "";
+
+    half = Model.FirstOrDefault().permitModels.FirstOrDefault().Month > 6 ? "Second Half" : "First Half";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+</head>
+<body style="">
+
+    <div style="padding:0px; color:black">
+
+        <div style="width:100%;" id="divPermitPreview">
+
+            <div class="text-center">
+
+
+                <div style="font-family: 'Arial Black'; font-weight: bold; line-height: 30px ">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:20%;">
+                                <img src="~/images/nuprc.png" alt="Logo" style="height: 150px; display: block; margin: 0 auto" />
+                            </td>
+                            <td style="width:75%;" valign="top">
+                                <div style="font-size:30px; font-weight:bold; color:forestgreen; margin-top:15px; margin-left:25px; line-height:37px">
+                                    NIGERIAN UPSTREAM PETROLEUM REGULATORY COMMISSION (NUPRC)
+                                </div>
+                                <br />
+                                <div style="font-family: Calibri; font-size: 13px; margin-left: 25px; font-weight: normal">
+                                    <span>No 7, Sylvester Ugoh Crescent Jabi, Abuja FCT | </span>
+                                    <span>PMB : 399 Garki, Abuja | </span>
+                                    <span>Phone : +234(0)9032000 | </span>
+                                    <span>Email : nuprc@nuprc.gov.ng | </span>
+                                    <span>Web : www.nuprc.gov.ng </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <p></p>
+
+                <div style="margin:0px 30px 0px 30px; padding:10px;" class="text-left">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:60%%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Ref. No:</p>
+                                    &nbsp;<span style="font-family: Calibri;"><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().PermitNO</b></span>
+                                </div>
+                            </td>
+                            <td style="width:40%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Date:</p>
+                                    &nbsp;<span style="font-family: Calibri;">@Model.FirstOrDefault().permitModels.FirstOrDefault().IssuedDate.ToString()</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <br />
+
+                    <div style="font-family:Candara; font-size:16px;">
+
+                        <div>The Managing Director,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyAddress,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyCity,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyState.</div>
+
+                        <br />
+
+                        <p>Dear Sir,</p>
+
+                        <div>
+                            <sanp style="font-weight:bold; text-decoration:underline;">NEW ALLOWABLE RATES FOR THE @half.ToUpper() OF THE YEAR @Model.FirstOrDefault().permitModels.FirstOrDefault().Year </sanp>
+
+                            <p></p>
+
+                            <div style="line-height:38px; font-size:17px;">
+
+
+                                <p>
+                                    We have carefully reviewed the performance of your wells with all the available information at our disposal and have computed new Technical Allowable Rates (TAR) for them.
+                                </p>
+
+                                <p>
+                                    The attached total new allowable rates for <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName</b> is <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().Volume</b> bopd. However, based on the current OPEC production quota, your total production has been adjusted accordingly to <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().Volume</b> bopd for the month of <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().MonthAdded @Model.FirstOrDefault().permitModels.FirstOrDefault().Year.</b>
+
+                                    This means production from your field(s) must not exceed <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().Volume</b> bopd for the month.
+
+                                    You may however manage the opening / shutting-in of your wells in such a way that you do not exceed this production volume, while also not exceeding the TAR assigned to any individual well opened for production. Compliance to this is mandatory, and effective <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().IssuedDate</b> until you are further advised.
+                                </p>
+
+                                <p>
+                                    We reiterate here that allowable is not transferable and that the individual well rate represents the maximum daily production from each well.
+                                </p>
+
+                                <p>
+                                    <b> It is to be noted that apart from wells currently on approved test, any well not listed in the attached schedule should on no account be re-opened for production without permission from the Director/CEO, Nigerian Upstream Petroleum Regulator Commission.</b>
+                                </p>
+
+
+                                <table style="width: 100%; border-spacing: 0;">
+                                    <tr style="font-size:17px;">
+                                        <td style="width: 66.666%;" valign="top">
+                                            <div>
+                                                Yours faithfully,
+
+                                                <br />
+
+                                                <img src="~/images/Signature/@Model.FirstOrDefault().permitModels.FirstOrDefault().Signature" style="height: 70px;" />
+
+                                                <br />
+
+                                                <div style="line-height:30px; font-size:16px">
+                                                    <span><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().ApprovedBy</b></span>,
+                                                    <br />
+                                                    <span><b>For: Commission Chief Executive (CCE), (NUPRC)</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td style="width: 33.333%;" valign="top">
+                                            <div class="text-center">
+                                                <img style="height:90px" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.FirstOrDefault().permitModels.FirstOrDefault().QrCode))" />
+
+                                                <br />
+                                                <small style="font-size:12px">Scan to verify</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
+
+
+
+<style>
+
+    #List1 li {
+        display: inline-block;
+        text-align: left;
+    }
+
+    #divPermitPreview {
+        background: url("/images/nupp.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+</style>

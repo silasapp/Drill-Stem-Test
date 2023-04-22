@@ -1,0 +1,176 @@
+﻿@using DST.Helpers;
+@using Microsoft.AspNetCore.Http;
+@model IEnumerable<DST.Models.DB.Applications>
+
+@{
+    ViewData["Title"] = "Edit " + ViewData["Details"].ToString() + " Application (" + ViewData["RefNO"] + ")";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+
+
+<div>
+    <div class="row" id="BackImage">
+
+        <br /><br />
+        <h3 class="DashCompanyName">@ViewData["Title"] </h3>
+        <br /><br />
+    </div>
+
+    <br />
+
+    <br />
+
+
+    @if (Model.Any())
+    {
+        foreach (var m in Model)
+        {
+            <center>
+
+                <div style="max-width:950px;" class="text-left" id="AppDiv">
+
+                    <div class="row">
+
+                        <div class="col-sm-12">
+
+                            <form id="FormEditDST" action="#" role="form">
+                                <input type="text" value="@generalClass.Encrypt(m.AppId.ToString())" hidden id="txtAppID" />
+
+                                <span>
+                                    <label for="UploadedFile" class="btn btn-danger btn-sm"><i class="fas fa-cloud-upload-alt"></i> Select Template (Excel File)</label>
+                                    <label style="color:green; font-weight:bold">File Name:</label> <label id="filename" name="filename" class="label-success"></label>
+                                    @*<input type="file" id="UploadedFile" style="visibility:hidden" name="UploadedFile">*@
+                                    <input type="file" id="UploadedFile" style="visibility:hidden" name="UploadedFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                </span>
+
+                                <br />
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check-circle"> </i> Upload File</button>
+                                </div>
+                            </form>
+
+                            <br /> 
+                            
+                            <div id="MessageInfo">
+
+                            </div>
+
+                            <br />
+
+                            <h6 class="text-primary">Uploaded Excel</h6>
+                            <hr />
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:11px">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Block (Oml/Opl)</th>
+                                            <th>Field Name</th>
+                                            <th>Reservior</th>
+                                            <th>WellName</th>
+                                            <th>String</th>
+                                            <th>Terrian </th>
+                                            <th>Expected/Proposed Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Fluid Type</th>
+                                            <th>Drive Mechanism</th>
+                                            <th>CreatedAt</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @if ((ViewBag.Template as List<DST.Models.DB.TemplateTable>).Any())
+                                        {
+                                            foreach (var a in (ViewBag.Template as List<DST.Models.DB.TemplateTable>))
+                                            {
+                                                <tr class="">
+                                                    <td>@a.OmlOpl</td>
+                                                    <td> @a.FieldName</td>
+                                                    <td> @a.Reservior</td>
+                                                    <td> @a.WellName</td>
+                                                    <td> @a.String </td>
+                                                    <td> @a.Terrian </td>
+                                                    <td> @a.StartDate </td>
+                                                    <td> @a.EndDate </td>
+                                                    <td>@a.FluidType</td>
+                                                    <td>@a.DriveMechanism</td>
+                                                    <td> @a.CreatedAt </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <br /><br />
+                            <div class="">
+                                <h6 class="text-primary">Contractor Information</h6>
+                            </div>
+                            <hr />
+                            <br />
+
+                            <div class="row">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label> Contractor Name</label>
+                                        <input class="form-control col-sm-12" value="@m.Contractor" id="txtContractorName" name="txtContractorName" placeholder="Enter contractor name..." />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Rig Name</label>
+                                        <input class="form-control col-sm-12" value="@m.RigName" id="txtRigName" name="txtRigName" placeholder="Enter rig name..." />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label> Type </label>
+                                        <input class="form-control col-sm-12" value="@m.RigType" id="txtRigType" name="txtRigType" placeholder="Enter rig type" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <br /><hr /><br />
+
+                    <div class="text-center">
+
+                        <button type="button" class="btn btn-success btn-lg m-b-10 m-l-5" id="btnSaveEdit"><i class="fas fa-check-circle"> </i> Update Information</button>
+                        <br />
+
+                        <div id="MessageInfo2"></div>
+
+                    </div>
+
+
+
+                </div>
+
+            </center>
+        }
+    }
+
+
+</div>
+

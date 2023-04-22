@@ -1,0 +1,159 @@
+﻿@using DST.Helpers
+@model IEnumerable<DST.Models.GeneralModel.ViewSubmit>
+@using Microsoft.AspNetCore.Http;
+@using DST.Controllers.Authentications;
+
+@{
+    ViewData["Title"] = "View Submission for " + ViewData["AppRef"].ToString();
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+
+<div>
+
+    <div class="row" id="BackImage">
+
+        <br /><br />
+        <h3 class="DashCompanyName">@ViewData["Title"] </h3>
+        <br /><br />
+    </div>
+
+    <br /><br />
+    @foreach (var apps in Model)
+    {
+        <div>
+            <center>
+                <div style="max-width:950px;" class="text-left" id="">
+
+                    @foreach (var r in apps.details)
+                    {
+                        <h6 class="text-danger"> Application Details</h6>
+
+                        <hr />
+
+                        <table class="table table-bordered table-striped" style="resize:vertical">
+                            <tbody>
+                                <tr>
+                                    <td style="width:150px">Ref NO </td>
+                                    <td class="text-left text-primary"><b>@r.RefNo</b></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="">Company Details</td>
+                                    <td class="text-left">
+                                        <span> <b> @r.CompanyName </b> (@r.CompanyAddress) </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="">Company Email</td>
+                                    <td class="text-left">@r.CompanyEmail </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Stage</td>
+                                    <td class="text-left text-dark"><b>@r.Stage</b></td>
+                                </tr>
+
+                                <tr>
+                                    <td> Status </td>
+
+                                    @{
+                                        var status =
+                                         r.Status == GeneralClass.Rejected ? "btn-danger" :
+                                         r.Status == GeneralClass.DISAPPROVE ? "btn-danger" :
+                                         r.Status == GeneralClass.PaymentPending ? "btn-info" :
+                                         r.Status == GeneralClass.Processing ? "btn-warning" :
+                                         r.Status == GeneralClass.PaymentCompleted ? "btn-warning" :
+                                         r.Status == GeneralClass.Approved ? "btn-success" : "btn-secondary";
+                                    }
+                                    <td class="text-left"> <span class="btn @status btn-sm">  @r.Status </span> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="">Contractor Name</td>
+                                    <td class="text-left">@r.ContractorName </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="">Rig Name</td>
+                                    <td class="text-left">@r.RigName </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="">Rig Type</td>
+                                    <td class="text-left">@r.RigType </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Date Applied</td>
+                                    <td class="text-left"><b>@r.DateApplied</b></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    }
+
+                    <br />
+
+                    <h6 class="text-danger">Uploaded Excel Details</h6>
+                    <hr />
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:small">
+
+                            <thead>
+                                <tr>
+                                    <th>Block (Oml/Opl)</th>
+                                    <th>Field Name</th>
+                                    <th>Reservior</th>
+                                    <th>Well Name</th>
+                                    <th>String</th>
+                                    <th>Terrian </th>
+                                    <th>Expected/Proposed Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Fluid Type</th>
+                                    <th>Drive Mechanism</th>
+                                    <th>CreatedAt</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var a in apps.templates)
+                                {
+                                    <tr class="">
+                                        <td>@a.OmlOpl</td>
+                                        <td> @a.FieldName</td>
+                                        <td> @a.Reservior</td>
+                                        <td> @a.WellName</td>
+                                        <td> @a.String </td>
+                                        <td> @a.Terrian </td>
+                                        <td> @a.StartDate </td>
+                                        <td> @a.EndDate </td>
+                                        <td>@a.FluidType</td>
+                                        <td>@a.DriveMechanism</td>
+                                        <td> @a.CreatedAt </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <br /><br />
+
+                    <div class="text-center">
+                        <a href="/CompanyApplication/EditApplication/@generalClass.Encrypt(apps.details.FirstOrDefault().AppId.ToString())" class="btn btn-md btn-warning"><i class="far fa-edit"></i> Edit Application </a> &nbsp; <a href="/CompanyApplication/ApplicationPayment/@generalClass.Encrypt(apps.details.FirstOrDefault().AppId.ToString())" class="btn btn-md btn-success"> <i class="far fa-arrow-alt-circle-right"></i> Proceed to Payment</a>
+                    </div>
+                </div>
+
+            </center>
+
+        </div>
+
+
+    }
+
+</div>

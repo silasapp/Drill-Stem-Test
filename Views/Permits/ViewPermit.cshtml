@@ -1,0 +1,237 @@
+﻿@using DST.Helpers;
+@using DST.HelpersClass;
+@model IEnumerable<DST.Models.GeneralModel.PermitViewModel>;
+
+@{
+    ViewData["Title"] = ViewData["PermitDocumentName"];
+    Layout = null;
+    NumberToWordHelper numberToWord = new NumberToWordHelper();
+    int i = 0;
+}
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title></title>
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <style type="text/css">
+        </style>
+    </head>
+    <body style="">
+
+        <div style="padding:0px; color:black">
+
+            <div style="width:100%;" id="divPermitPreview">
+
+                <div class="text-center">
+
+
+                    <div style="font-family: 'Arial Black'; font-weight: bold; line-height: 30px ">
+
+                        <table style="width: 100%; border-spacing: 0;">
+                            <tr style="font-size:17px;">
+                                <td style="width:20%;">
+                                    <img src="~/images/nuprc.png" alt="Logo" style="height: 150px; display: block; margin: 0 auto" />
+                                </td>
+                                <td style="width:75%;" valign="top">
+                                    <div style="font-size:30px; font-weight:bold; color:forestgreen; margin-top:15px; margin-left:25px; line-height:37px">
+                                        NIGERIAN UPSTREAM PETROLEUM REGULATORY COMMISSION (NUPRC)
+                                    </div>
+                                    <br />
+                                    <div style="font-family: Calibri; font-size: 13px; margin-left: 25px; font-weight: normal">
+                                        <span>No 7, Sylvester Ugoh Crescent Jabi, Abuja FCT | </span>
+                                        <span>PMB : 399 Garki, Abuja | </span>
+                                        <span>Phone : +234(0)9032000 | </span>
+                                        <span>Email : nuprc@nuprc.gov.ng | </span>
+                                        <span>Web : www.nuprc.gov.ng </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <p></p>
+
+                    <div style="margin:0px 30px 0px 30px; padding:10px;" class="text-left">
+
+                        <table style="width: 100%; border-spacing: 0;">
+                            <tr style="font-size:17px;">
+                                <td style="width:60%%;" valign="top">
+                                    <div style="padding: 5px 0 0;">
+                                        <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Ref. No:</p>
+                                        &nbsp;<span style="font-family: Calibri;"><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().PermitNO</b></span>
+                                    </div>
+                                </td>
+                                <td style="width:40%;" valign="top">
+                                    <div style="padding: 5px 0 0;">
+                                        <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Date:</p>
+                                        &nbsp;<span style="font-family: Calibri;">@Model.FirstOrDefault().permitModels.FirstOrDefault().IssuedDate.ToString()</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <br />
+
+                        <div style="font-family:Candara; font-size:16px;">
+
+                            <div>The Managing Director,</div>
+                            <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName,</div>
+                            <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyAddress,</div>
+                            <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyCity,</div>
+                            <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyState.</div>
+
+                            <br />
+
+                            <div>
+                                <sanp style="font-weight:bold; text-decoration:underline;">RE: APPLICATION FOR APPROVAL OF DRILL STEM TEST (DST) FOR @Model.FirstOrDefault().permitModels.FirstOrDefault().WellDetails.ToUpper() </sanp>
+
+                                <p></p>
+
+                                <div style="line-height:40px; font-size:17px; text-align:justify">
+
+
+                                    <p>
+                                        Reference is made to your letter with application reference <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().RefNo</b> dated <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().DateSubmitted?.ToString("dd MMMM, yyyy")</b> on the above subject.
+                                    </p>
+
+
+                                    <p>
+                                        We have carefully reviewed your submission and wish to inform you that in accordance with Sections 38 and 43 of the Petroleum (Drilling and Production) Regulations, 1969 as amended, approval is hereby granted for you to carry out DST on <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().WellDetails</b>  as requested.
+                                    </p>
+
+                                    <p>
+                                        You are required to conduct the test in accordance with its objectives, which is to ascertain the producibility of the reservoirs for well completion activities. The test should be carried out in strict compliance with global best practices and the result forwarded to this office not later than two (2) weeks after completion. You are also required to upload the test results on the National Production Monitoring System (NPMS) platform.
+                                    </p>
+
+                                    <p>
+                                        Please note that late submission of well test result(s) or failure to upload well test data on the NPMS platform may attract appropriate sanctions in line with provisions of the law.
+                                    </p>
+
+
+                                    <p>
+                                        The underlisted staff have been nominated to participate in the exercise.
+                                    </p>
+
+                                    <table class="table table-responsive table-bordered" style="font-size:smaller">
+                                        <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Name</th>
+                                                <th>Division</th>
+                                                <th>Location</th>
+                                                <th>Email Address</th>
+                                                <th>Contact No.</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @if (Model.FirstOrDefault().staffNominations.Any())
+                                            {
+                                                @foreach (var n in Model.FirstOrDefault().staffNominations)
+                                                {
+                                                    i++;
+
+                                                    <tr class="text-center">
+                                                        <td>@i</td>
+                                                        <td>@n.FullName</td>
+                                                        <td>@n.Division</td>
+                                                        <td>@n.FieldOffice</td>
+                                                        <td>@n.StaffEmail</td>
+                                                        <td>@n.Phone</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+
+
+                                    <p>
+                                        Please ensure you inform Zonal Operations Controller, Nigerian Upstream Petroleum Regulator Commission, &nbsp; <i>@Model.FirstOrDefault().ZoneName</i> &nbsp; of the actual date of test prior to commencement of the operation.
+                                    </p>
+
+                                    <p>
+                                        We acknowledge receipt of your e-payment with Remita Retrieval Reference (RRR) Number &nbsp; <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().RRR</b> dated <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().DatePaid</b> for hundred thousand naira (N100,000.00) being processing fee for this permit.
+                                    </p>
+
+
+                                    <table style="width: 100%; border-spacing: 0;">
+                                        <tr style="font-size:17px;">
+                                            <td style="width: 66.666%;" valign="top">
+                                                <div>
+                                                    Yours faithfully,
+
+                                                    <br />
+
+                                                    <img src="~/images/Signature/@Model.FirstOrDefault().permitModels.FirstOrDefault().Signature" style="height: 70px;" />
+
+                                                    <br />
+
+                                                    <div style="line-height:30px; font-size:16px">
+                                                        <span><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().ApprovedBy</b></span>,
+                                                        <br />
+                                                        <span><b>For: Commission Chief Executive (CCE), (NUPRC)</b></span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 33.333%;" valign="top">
+                                                <div class="text-center">
+                                                    <img style="height:90px" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.FirstOrDefault().permitModels.FirstOrDefault().QrCode))" />
+
+                                                    <br />
+                                                    <small style="font-size:12px">Scan to verify</small>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </body>
+    </html>
+
+
+
+<style>
+
+    #List1 li {
+        display: inline-block;
+        text-align: left;
+    }
+
+    #divPermitPreview {
+        background: url("/images/nupp.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+</style>

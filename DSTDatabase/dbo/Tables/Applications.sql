@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[Applications] (
+    [AppId]               INT            IDENTITY (1, 1) NOT NULL,
+    [FacilityID]          INT            NOT NULL,
+    [CompanyID]           INT            NOT NULL,
+    [AppTypeStageID]          INT            NOT NULL,
+    [PreviousAppId] INT NULL, 
+    [AppRefNo]            VARCHAR (30)   NOT NULL,
+    [Contractor]          VARCHAR (100)  NULL,
+    [RigName]             VARCHAR (100)  NULL,
+    [RigType]             VARCHAR (50)   NULL,
+    [Status]              VARCHAR (25)   NOT NULL,
+    [isProposedSubmitted] BIT            NOT NULL,
+    [IsProposedApproved]  BIT            NOT NULL,
+    [IsReportSubmitted]   BIT            NOT NULL,
+    [IsReportApproved]    BIT            NOT NULL,
+    [DateApplied]         DATETIME       NOT NULL,
+    [DateSubmitted]       DATETIME       NULL,
+    [UpdatedAt]           DATETIME       NULL,
+    [DeskID]              INT            NULL,
+    [CurrentDeskID]       INT            NULL,
+    [DeletedBy]           INT            NULL,
+    [DeletedStatus]       BIT            NULL,
+    [DeletedAt]           DATETIME       NULL,
+    [Comment]             VARCHAR (1000) NULL,
+    [Volume] DECIMAL(18, 2) NULL, 
+    CONSTRAINT [PK__Applicat__8E2CF7F935DD47F0] PRIMARY KEY CLUSTERED ([AppId] ASC)
+);
+

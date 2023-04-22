@@ -1,0 +1,133 @@
+﻿@model IEnumerable<DST.Models.GeneralModel.SearchList>;
+@using DST.Helpers;
+@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["Title"] = "Transaction Reports";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+
+<div class="card-black">
+
+
+    <div class="row">
+
+        
+
+        <div class="col-sm-6">
+            <label>Select Type</label>
+            <div class="dropdown-sin-3">
+                <select style="display:none" multiple placeholder="Select" name="txtSelType[]" id="txtSelType">
+                    @foreach (var a in Model.FirstOrDefault().types)
+                    {
+                        <option value="@a.AppTypeId">@a.TypeName</option>
+                    }
+
+                </select>
+            </div>
+            <br />
+        </div>
+
+        <div class="col-sm-6">
+            <label>Select Stage</label>
+            <div class="dropdown-sin-4">
+                <select style="display:none" multiple placeholder="Select" name="txtSelStage[]" id="txtSelStage">
+                    @foreach (var a in Model.FirstOrDefault().stages)
+                    {
+                        <option value="@a.AppStageId">@a.StageName</option>
+                    }
+
+                </select>
+            </div>
+            <br />
+        </div>
+
+        <div class="col-sm-6">
+            <label>Select Application Status</label>
+            <div class="dropdown-sin-5">
+                <select style="display:none" multiple placeholder="Select" name="txtSelStatus[]" id="txtSelStatus">
+                    <option value="@GeneralClass.PaymentPending">@GeneralClass.PaymentPending</option>
+                    <option value="@GeneralClass.PaymentCompleted">@GeneralClass.PaymentCompleted</option>
+                </select>
+            </div>
+            <br />
+        </div>
+
+
+
+
+        <div class="col-sm-3">
+            <label for="comment">Select Date From :</label>
+            <br />
+            <input type="text" class="form-control" id="txtApplicationReportFrom" value="" />
+        </div>
+
+        <div class="col-sm-3">
+            <label for="comment">Select Date To :</label>
+            <br />
+            <input type="text" class="form-control" id="txtApplicationReportTo" value="" />
+        </div>
+
+
+        <div class="col-sm-1">
+            <label><br /></label>
+            <button class="btn btn-primary" id="btnTransactionReportSearch"><i class="fas fa-search"> </i> Search</button>
+        </div>
+
+    </div>
+
+    <h2 class="">Your Selected Search Results </h2>
+    <hr />
+    <br />
+
+    <div class="table-responsive">
+
+        <button id='btnRtable2' class="btn btn-danger btn-sm">Export Excel</button>
+
+      <p></p>
+
+        <table class="table table-bordered table-hover" id="SearchTransactionTabless" style="font-size:12px">
+
+            <thead>
+                <tr>
+                    <th>Reference NO</th>
+                    <th>RRR</th>
+                    <th>Company</th>
+                    <th>Facility</th>
+                    <th>Type</th>
+                    <th>Stage</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Servic Charge</th>
+                    <th>Total Amt.</th>
+                    <th>Date</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+
+            @*<tfoot>
+                <tr style="color:crimson">
+                    <th colspan="6" class="text-center" style="text-align:right">Total :</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    
+                    <th></th>
+                </tr>
+
+            </tfoot>*@
+
+        </table>
+
+    </div>
+
+
+</div>

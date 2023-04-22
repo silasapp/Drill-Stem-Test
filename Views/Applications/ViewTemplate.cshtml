@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DST.Models.DB.TemplateTable>
+
+@{
+    ViewData["Title"] = "ViewTemplate";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+}
+
+<h1>View Template for @ViewData["RefNo"]</h1>
+
+<br />
+
+<table class="table table-bordered table-striped" id="MyAppsTable">
+    <thead>
+        <tr>
+            <th>Block (Oml/Opl)</th>
+            <th>Field Name</th>
+            <th>Reservior</th>
+            <th>WellName</th>
+            <th>String</th>
+            <th>Terrian </th>
+            <th>Expected/Proposed Start Date</th>
+            <th>End Date</th>
+            <th>Fluid Type</th>
+            <th>Drive Mechanism</th>
+            <th>CreatedAt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>@a.OmlOpl</td>
+                <td> @a.FieldName</td>
+                <td> @a.Reservior</td>
+                <td> @a.WellName</td>
+                <td> @a.String </td>
+                <td> @a.Terrian </td>
+                <td> @a.StartDate </td>
+                <td> @a.EndDate </td>
+                <td>@a.FluidType</td>
+                <td>@a.DriveMechanism</td>
+                <td> @a.CreatedAt </td>                
+            </tr>
+        }
+    </tbody>
+</table>

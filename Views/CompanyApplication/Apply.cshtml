@@ -1,0 +1,219 @@
+﻿@using DST.Helpers;
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Apply for " + ViewData["TypeName"] + " Application";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+
+
+<div>
+    <div class="row" id="BackImage">
+
+        <br /><br />
+        <h3 class="DashCompanyName">@ViewData["Title"] </h3>
+        <br /><br />
+    </div>
+
+    <br /><br />
+
+
+    <center>
+
+        <div style="max-width:950px;" class="text-left" id="AppDiv">
+
+            <input type="number" hidden value="@ViewData["TypeId"]" id="txtTypeId" />
+
+            <div class="form-group">
+
+                <label class="label"><b> Select Application Stage </b></label>
+                <select class="form-control col-sm-6" required id="seltxtAppStage" name="seltxtAppStage">
+                    <option> </option>
+                    @foreach (var m in Model)
+                    {
+                        <option value="@m.TypeStageID" data-counter="@m.Counter">@m.StageName</option>
+                    }
+                </select>
+            </div>
+
+
+            <br /><hr /><br />
+
+            <form action="#" id="FormSaveDST" style="display:none">
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <span>
+                            <label for="UploadedFile" class="btn btn-danger btn-sm"><i class="fas fa-cloud-upload-alt"></i> Select Template (Excel File)</label>
+                            <label style="color:green; font-weight:bold">File Name:</label> <label id="filename" name="filename" class="label-success"></label>
+                            @*<input type="file" id="UploadedFile" style="visibility:hidden" name="UploadedFile">*@
+                            <input type="file" id="UploadedFile" style="visibility:hidden" name="UploadedFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                        </span>
+
+                        <br /><br />
+                        <hr />
+                    </div>
+
+
+                    @if (ViewData["TypeName"].ToString().Trim() != GeneralClass.MER)
+                    {
+                        <div class="col-sm-12">
+                            <br />
+                            <div class="">
+                                <h6 class=""> <b>Contractor Information</b> </h6>
+                            </div>
+                            <hr />
+                            <br />
+
+                            <div class="row">
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label> Contractor Name</label>
+                                        <input class="form-control col-sm-12" id="txtContractorName" name="txtContractorName" placeholder="Enter contractor name..." />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Rig Name</label>
+                                        <input class="form-control col-sm-12" id="txtRigName" name="txtRigName" placeholder="Enter rig name..." />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label> Type </label>
+                                        <input class="form-control col-sm-12" id="txtRigType" name="txtRigType" placeholder="Enter rig type" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+
+
+                <br /><br />
+
+                <div class="col-sm-12 text-center">
+                    <input type="submit" name="Submit" id="submitupload" value="Submit and Continue" class="btn btn-success" />
+                </div>
+
+            </form>
+
+            <br />
+
+
+            <form id="FormCreateNewOtherApplication" style="display:none" action="#">
+
+                <div class="form-group">
+
+                    <small> <b> Showing all your approvals gotten for <span class="text-danger">@ViewData["TypeName"].ToString()</span> </b></small>
+                    <p></p>
+                    <small><b class="text-info"> Kindly select approval that concerns what you want to do.</b></small>
+
+                    <p></p>
+                    <label id="OtherNewApp"> </label>
+
+                    <div class="input-group col-sm-12">
+
+                        @if (ViewData["TypeName"].ToString().Trim() == GeneralClass.MER)
+                        {
+                            <input class="form-control col-sm-6" list="txtpNO" id="txtRefNumber" name="txtRefNumber" required placeholder="Enter Refrence Number">
+
+                            <datalist id="txtpNO">
+                                @if ((ViewBag.Tar as List<DST.Models.GeneralModel.PermitsInfo>).Any())
+                                {
+                                    foreach (var p in (ViewBag.Tar as List<DST.Models.GeneralModel.PermitsInfo>))
+                                    {
+                                        <option value="@p.PermitNo">@p.PermitDescription</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="NO Permits Found"> NO Approval Found </option>
+                                }
+                            </datalist>
+                        }
+                        else if (ViewData["TypeName"].ToString().Trim() == GeneralClass.EWT)
+                        {
+                            <input class="form-control col-sm-6" list="txtpNO" id="txtRefNumber" name="txtRefNumber" required placeholder="Enter Refrence Number">
+
+                            <datalist id="txtpNO">
+                                @if ((ViewBag.Ewt as List<DST.Models.GeneralModel.PermitsInfo>).Any())
+                                {
+                                    foreach (var p in (ViewBag.Ewt as List<DST.Models.GeneralModel.PermitsInfo>))
+                                    {
+                                        <option value="@p.PermitNo">@p.PermitDescription</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="NO Permits Found"> No approval found </option>
+                                }
+                            </datalist>
+                        }
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" id="btnCheckPermit"> <i class="fa fa-search"> </i> Check Permit </button>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="" id="PermitInfo"> </div>
+                <div class="" id="ErrorDiv"> </div>
+
+                <input type="text" hidden id="txtFacilityID" />
+
+                @if (ViewData["TypeName"].ToString().Trim() == GeneralClass.MER)
+                {
+                    <br />
+
+                    <label>Have you uploaded your MER to the NPMS platform</label>
+                    <p></p>
+                    <select class="form-control col-sm-2" id="btnSelectNPMD">
+                        <option></option>
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+                    </select>
+
+                    <hr />
+
+                    <div class="" style="display:none" id="ActionButtons">
+                        <button type="submit" class="btn btn-success m-b-10 m-l-5">OK. Proceed</button>
+                        <button type="reset" class="btn btn-secondary m-b-10 m-l-5">Reset</button>
+                    </div>
+                }
+                else
+                {
+                    <hr />
+
+                    <div class="">
+                        <button type="submit" class="btn btn-success m-b-10 m-l-5">OK. Proceed</button>
+                        <button type="reset" class="btn btn-secondary m-b-10 m-l-5">Reset</button>
+                    </div>
+                }
+
+            </form>
+
+            <div id="MessageInfo">
+
+            </div>
+
+        </div>
+
+    </center>
+
+</div>
+
+
+

@@ -1,0 +1,89 @@
+﻿
+@using DST.Helpers
+@model IEnumerable<DST.RecycleModels.RecycleCompany>
+
+@{
+    ViewData["Title"] = "Deleted Companies";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:x-small">
+
+
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Company Code</th>
+                    <th>Created At</th>
+                    <th>Deleted Status</th>
+                    <th>Deleted By</th>
+                    <th>Deleted At </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var a in Model)
+                    {
+                        var deleted = a.DeletedStatus == true ? "Deleted" : "Active";
+                        var id = generalClass.Encrypt(a.CompanyID.ToString());
+
+                        <tr>
+                            <td>  @a.CompanyName </td>
+                            <td>  @a.CompanyEmail </td>
+                            <td>  @a.Address </td>
+                            <td>  @a.City </td>
+                            <td>  @a.StateName </td>
+                            <td>  @a.CompanyCode </td>
+                            <td>  @a.CreatedAt.ToLongDateString() </td>
+                            <td>  @deleted </td>
+                            <td>  @a.DeletedBy </td>
+                            <td>  @a.DeletedAt </td>
+                            <td> <button class="btn btn-sm btn-success" onclick="RestoreCompany('@id')"><i class="fas fa-recycle"> </i> Restore</button> </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+
+<script>
+
+    function RestoreCompany(id) {
+        var msg = confirm("Are you sure you want to restore this deleted entry?");
+
+        if (msg === true) {
+            $.post("/Recyclebin/RestoreCompany", { "id": id }, function (response) {
+
+                if ($.trim(response) === "Restored") {
+                    alert("Company successfully restored");
+                    location.reload(true);
+                }
+                else {
+                    alert(Response);
+                }
+
+            });
+        }
+    }
+</script>
+
+

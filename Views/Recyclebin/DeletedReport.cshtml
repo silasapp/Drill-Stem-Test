@@ -1,0 +1,99 @@
+﻿
+@using DST.Helpers
+@model IEnumerable<DST.RecycleModels.RecycleAnonymous>
+
+@{
+    ViewData["Title"] = "Deleted Reports";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="card-black">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="MyAppsTable" style="font-size:x-small">
+
+
+            <thead>
+                <tr>
+
+                    <th>Subject</th>
+                    <th>Comment</th>
+                    <th>Source</th>
+                    <th>Created At</th>
+                    <th>Deleted Status</th>
+                    <th>Created By</th>
+                    <th>Deleted By</th>
+                    <th>Deleted At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var a in Model)
+                    {
+                        var deleted = a.DeletedStatus == true ? "Deleted" : "Active";
+                        var id = generalClass.Encrypt(a.ID.ToString());
+
+                        <tr>
+
+                            <td>  @a.Subject </td>
+                            <td>  @a.Comment </td>
+                            <td>
+                                <a href="@a.DocSource" target="_blank">
+                                    <i class="far fa-file-pdf fa-lg text-danger"></i>
+
+                                    <p></p>
+
+                                    <b>Click to view file</b>
+                                </a>
+                            </td>
+                            <td>  @a.CreatedAt.ToLongDateString() </td>
+                            <td>  @deleted </td>
+                            <td>  @a.CreatedBy </td>
+                            <td>  @a.DeletedBy </td>
+                            <td>  @a.DeletedAt </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="/Applications/ViewReport/@id" target="_blank"> <i class="fas fa-external-link-alt"> </i> View</a>
+                                <button class="btn btn-sm btn-success" onclick="RestoreReport('@id')"><i class="fas fa-recycle"> </i> Restore</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+<script>
+
+    function RestoreReport(id) {
+        var msg = confirm("Are you sure you want to restore this deleted entry?");
+
+        if (msg === true) {
+            $.post("/Recyclebin/RestoreReport", { "id": id }, function (response) {
+
+                if ($.trim(response) === "Restored") {
+                    alert("Report successfully restored");
+                    location.reload(true);
+                }
+                else {
+                    alert(Response);
+                }
+
+            });
+        }
+    }
+</script>
+
+

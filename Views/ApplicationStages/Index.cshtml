@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewData["Title"] = "Application Stage Config.";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+}
+
+
+    <h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="row">
+
+    <div class="col-sm-4">
+
+        <div class="card-black">
+
+            <div class="card-subtitle text-white">
+                <i class="book icon"></i>
+                <span class="content">
+                    Create App Stage
+                </span>
+            </div>
+
+            <form action="#" id="FormCreateAppStage">
+
+                <div class="form-group">
+
+                    <input name="txtAppStageName" id="txtAppStageName" class="form-control" placeholder="App Stage Name ..." required />
+
+                    <br />
+
+                    <input name="txtAppStageShortName" id="txtAppStageShortName" class="form-control" placeholder="App Stage Short Name... (Eg. SUI)" required />
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="content text-secondary"> Amount ($) </label>
+                            <input name="txtStageAmount" type="number" step="500" id="txtStageAmount" value="0" class="form-control" placeholder="App Stage Amount ..." required />
+
+                            <br />
+
+                            <label class="content text-secondary"> Service Charge </label>
+                            <input name="txtServiceCharge" type="number" step="500" id="txtServiceCharge" value="0" class="form-control" placeholder="App Stage Amount ..." required />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create App Stage" class="btn btn-sm ui pink button" />
+                </div>
+
+                <div id="CreateAppStageInfo"> </div>
+            </form>
+
+
+        </div>
+
+        <br />
+
+        <div class="card-black">
+
+            <div class="card-subtitle text-white">
+                <i class="book icon"></i>
+                <span class="content">
+                    Edit App Stage
+                </span>
+            </div>
+
+
+            <form asp-action="Edit" id="FormEditAppStage">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" id="txtEditAppStageID" />
+                <div class="form-group">
+
+                    <input class="form-control" id="txtEditAppStageName" placeholder="Edit App Stage Name..." />
+
+                    <br />
+
+                    <input name="txtEditAppStageShortName" id="txtEditAppStageShortName" class="form-control" placeholder="App Stage Short Name... (Eg. SUI)" required />
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="content text-secondary"> Amount ($) </label>
+                            <input name="txtEditStageAmount" type="number" step="500" id="txtEditStageAmount" value="0" class="form-control" placeholder="App Stage Amount ..." required />
+
+                            <br />
+
+                            <label class="content text-secondary"> Service Charge </label>
+                            <input name="txtEditServiceCharge" id="txtEditServiceCharge" type="number" step="500" id="txtStageAmount" value="0" class="form-control" placeholder="App Stage Amount ..." required />
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save Edit" class="btn btn-sm ui pink button" />
+                    <input type="reset" value="Clear" class="btn btn-sm ui grey button" />
+                </div>
+
+            </form>
+
+            <div id="EditAppStageInfo"> </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-sm-8">
+
+        <div class="card-black">
+
+            <div class="card-body">
+
+                <h4 class="card-title"> Application Stages </h4>
+                <h6 class="card-subtitle text-white"> List of all created Application Stages </h6>
+
+                <table id="TableAppStage" class="table table-bordered table-hover" style="font-size:small">
+                    <thead>
+                        <tr>
+                            <th>
+                                App Stage ID
+                            </th>
+                            <th>
+                                Stage Name
+                            </th>
+                            <th>
+                                Short Name
+                            </th>
+                            <th>
+                                Amount ($)
+                            </th>
+
+                            <th>
+                                Service Charge
+                            </th>
+
+                            <th>
+                                Created At
+                            </th>
+                            <th>
+                                Updated At
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+

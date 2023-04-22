@@ -1,0 +1,316 @@
+﻿@using DST.Helpers
+@using DST.Controllers.Authentications;
+@using Microsoft.AspNetCore.Http;
+
+@model IEnumerable<DST.Models.GeneralModel.MySchdule>
+
+@{
+    ViewData["Title"] = ViewData["ScheduleTitle"];
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+    GeneralClass generalClass = new GeneralClass();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+
+
+
+<div class="card-black">
+
+    <br />
+    <input type="text" id="txtScheduleID" hidden />
+    <input type="text" id="txtScheduleStaffID" hidden />
+
+    <div class="text-center">
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" id="RecordView"><i class="fas fa-table"></i> Table View</button>
+            <button class="btn btn-warning" id="CalendarView"><i class="far fa-calendar-alt"></i> Calendar View</button>
+        </div>
+    </div>
+
+    <br />
+
+    <p><hr /></p>
+
+    <div style="max-height:initial">
+
+        <div id="SchduleDiv" class="table-responsive">
+
+            <table class="table table-bordered table-hover" id="MyFacilityTable" style="font-size:small">
+                <thead>
+                    <tr>
+
+                        <th> Company </th>
+                        <th> Facility </th>
+                        <th> Type </th>
+                        <th> Location </th>
+                        <th> Date </th>
+                        <th> Created By </th>
+                        <th> Staff Comment </th>
+                        <th> Marketer Accepted </th>
+                        <th> Marketer Comment </th>
+                        <th> Supervisor </th>
+                        <th> Supervisor Approved </th>
+                        <th> Supervisor Comment </th>
+                        <th> CreatedAt </th>
+                        <th> UpdatedAt </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+                        var cResponse = a.CustomerResponse == 1 ? "Accepted" :
+                            a.CustomerResponse == 2 ? "Rejected" : "Awaiting";
+
+                        var sResponse = a.SupervisorApproved == 1 ? "Accepted" :
+                            a.SupervisorApproved == 2 ? "Rejected" : "Awaiting";
+
+                        var startDate = DateTime.Parse(a.ScheduleDate.ToString()).Date;
+                        var expDate = startDate.AddDays(3);
+
+                        <tr>
+
+                            <td> @a.CompanyName</td>
+                            <td> @a.FacilityName  - @a.ContactName (@a.ContactPhone)</td>
+
+                            <td> @a.ScheduleType</td>
+                            <td> @a.ScheduleLocation</td>
+                            <td> @a.ScheduleDate</td>
+
+                            <td> @a.ScheduleBy</td>
+                            <td> <small>@a.StaffComment</small></td>
+
+                            <td> <b> @cResponse</b></td>
+                            <td> <small> @a.CustomerComment </small></td>
+
+                            <td> @a.ApprovedBy</td>
+                            <td>
+                                @if (DateTime.Now.Date > expDate)
+                                {
+                                    <b class="text-danger"> Schedule Expired </b>
+                                }
+                                else
+                                {
+                                    @if (a.Supervisor == Convert.ToInt32(generalClass.Decrypt(Context.Session.GetString("_sessionUserID"))))
+                                    {
+                                        if (a.SupervisorApproved == 0)
+                                        {
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#ModalSupervsorAcceptSchedule" onclick="SupervisorApproveSchedule('@generalClass.Encrypt(a.ScheduleID.ToString())')"><i class="fas fa-check-circle"> </i> Accept </button>
+                                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#ModalSupervisorRejectSchedule" onclick="SupervisorRejectSchedule('@generalClass.Encrypt(a.ScheduleID.ToString())')"> <i class="fas fa-times-circle"> </i> Reject </button>
+                                            </div>
+                                        }
+                                    }
+
+                                }
+
+                                <b class="text-primary"> @sResponse </b>
+                            </td>
+                            <td> <small>@a.SupervisorComment</small></td>
+
+
+                            <td> @a.CreatedAt </td>
+                            <td> @a.UpdatedAt </td>
+
+                        </tr>
+                        @*}*@
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <div id="CalendarDiv" class="hide">
+            <div id='calendar'></div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+@* Accepting application schedule with comment *@
+<div class="modal" id="ModalSupervsorAcceptSchedule">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" id="SupervsorAcceptSchedule">
+            <div class="modal-header">
+                <h4 class="modal-title text-primary"> Accept schedule with comment </h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="btn btn-dark btn-sm">Close</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <br />
+                    <textarea id="txtSupervisorAcceptComment" style="width:100%" rows="5" cols="68" placeholder="Some comment here...Max(100)"></textarea>
+                </div>
+
+                <button class="btn btn-success" id="btnSupervisorAcceptSchedule" onclick="ApproveSchedule()"> Accept Schedule </button>
+                <p></p>
+                <div id="ScheduleModalInfo"> </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@* Rejecting Application schedule *@
+<div class="modal" id="ModalSupervisorRejectSchedule">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" id="SupervisorRejectSchedule">
+            <div class="modal-header">
+                <h4 class="modal-title text-danger"> Reject Schedule with comment </h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="btn btn-dark btn-sm">Close</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <br />
+                    <textarea id="txtSupervisorRejectComment" style="width:100%" rows="5" cols="68" placeholder="Some comment here...Max(100)"></textarea>
+                </div>
+
+                <button class="btn btn-danger" id="btnSupervisorRejectSchedule" onclick="RejectSchedule()"> Reject Schedule </button>
+                <p></p>
+                <div id="ScheduleRejectModalInfo" class="text-danger"> </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function SupervisorApproveSchedule(id) { // encrypted schedule id
+
+        $("#txtScheduleID").val(id);
+    }
+
+
+    function SupervisorRejectSchedule(id) {
+
+        $("#txtScheduleID").val(id);
+    }
+
+
+    function ApproveSchedule() { // id = schdule id
+
+        id = $("#txtScheduleID").val();
+        var comment = $("#txtSupervisorAcceptComment").val();
+
+        var msg = confirm("Are you sure you want to approve this schedule?");
+
+        if (msg === true) {
+
+            $("#SupervsorAcceptSchedule").addClass("Submitloader");
+
+            $.post("/Schedules/ApproveSchedule", { "ScheduleID": id, "SupervisorComment": comment }, function (response) {
+                if ($.trim(response) === "Schedule Approved") {
+                    alert("Schedule has been approved by you");
+                    location.reload(true);
+                    $("#SupervsorAcceptSchedule").removeClass("Submitloader");
+                }
+                else {
+                    alert(response);
+                    $("#SupervsorAcceptSchedule").removeClass("Submitloader");
+                }
+            });
+        }
+    }
+
+
+    function RejectSchedule() {
+
+        var id = $("#txtScheduleID").val();
+        var comment = $("#txtSupervisorRejectComment").val();
+
+        var msg = confirm("Are you sure you want to reject this schedule?");
+
+        if (msg === true) {
+
+            $("#SupervisorRejectSchedule").addClass("Submitloader");
+
+            $.post("/Schedules/RejectSchedule", { "ScheduleID": id, "SupervisorComment": comment }, function (response) {
+                if ($.trim(response) === "Schedule Rejected") {
+                    alert("Schedule has been rejected by you");
+                    location.reload(true);
+                }
+                else {
+                    alert(response);
+                    $("#SupervisorRejectSchedule").removeClass("Submitloader");
+                }
+            });
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar;
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['bootstrap', 'dayGrid', 'timeGrid', 'list'],
+            height: 600,
+            header: {
+                left: 'prevYear,prev,next,nextYear today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth,listWeek,listDay,'
+            },
+            views: {
+                listDay: { buttonText: 'list day' },
+                listWeek: { buttonText: 'list week' },
+                listMonth: { buttonText: 'list month' }
+            },
+
+            defaultDate: new Date(),
+            themeSystem: 'bootstrap',
+            defaultView: 'dayGridMonth',
+            weekNumbers: false,
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            eventLimit: false, // allow "more" link when too many events
+            events: '@Url.RouteUrl(new { action = "ScheduleCalendar", controller = "Schedules", id = ViewData["ScheduleStaffID"].ToString()})',
+
+            eventRender: function (info) {
+
+                Tipped.create(info.el, function (element) {
+                    return {
+                        title: info.event.title + " SCHEDULE ",
+                        content: "<div> <b class='text-warning'> Schedule Details </b> <hr> <p> Company : " + info.event.extendedProps.company + " </p> <p> Facility : " + info.event.extendedProps.facility + " </p>  <p> Date : " + info.event.start + "</p> <p> Location : " + info.event.extendedProps.location + "</p> <p> Contact Person : " + info.event.extendedProps.contact + "</p> <p> Customer Response : " + info.event.extendedProps.customerResponse + "</p> <p> Customer Comment : " + info.event.extendedProps.customerComment + "</p> <hr> <p> Schedule By : " + info.event.extendedProps.schedule + "</p>  <p> Staff Comment : " + info.event.extendedProps.staffComment + "</p> <p> Supervisor Response : " + info.event.extendedProps.supervisorResponse + "</p> <p> Supervisor Comment : " + info.event.extendedProps.supervisorComment + "</p> </div>"
+                    };
+                },
+                    {
+                        radius: false,
+                        close: true,
+                        size: 'large',
+                        behavior: 'custom-slow',
+                    }
+                );
+            }
+        });
+
+        calendar.render();
+
+    });
+
+</script>

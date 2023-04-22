@@ -1,0 +1,71 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "The Legal Stuff";
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<body>
+
+    <div class="container" style="padding:20px; margin-top:10px">
+
+        <h1 style="font-family:'Segoe UI Light';"> <img src="~/images/nuprc.png" style="height:60px; padding:1px" />Terms & Conditions</h1>
+        <hr />
+
+        <div style="line-height:33px; font-size:19px; font-family:Calibri">
+
+            <br />
+
+            <div class="text-center">
+                <b class="text-danger">Copyright :</b> All  rights  reserved.  This  document  is  the  property  of  the  Nigerian Upstream Petroleum Regulatory Commission (NUPRC), and the copyright thereof is vested in the Commission. The use of any part of this document as a quote or in any publication shall be acknowledged and/or referenced.
+            </div>
+
+            <br /><br />
+
+            <div class="text-center">
+                <h5> <b>REQUIREMENT FOR PROCESSING WELL TEST - EXTENDED WELL TEST, MAXIMUM EFFICENCY RATE AND DRILL STEAM TEST</b></h5>
+                <hr />
+            </div>
+
+            <br />
+            <div class="text-center">
+                <p>
+                    These guidelines are made pursuant to the provisions of the Petroleum (Amendment) Act No. 38, saved by Section 311 of the PIA. In accordance
+                    with Sections 38 and 43 of the Petroleum (Drilling and Production) Regulations, 1969 as
+                    amended.
+                </p>
+
+                <br />
+
+
+                <p>
+                    By clicking the <b>AGREE</b> button - you accept the <a href="https://www.NUPRC.gov.ng/NUPRC-guidelines/#upstream" target="_blank"> Terms & Condictions </a> that govorn the grant for APPROVAL
+                    of EXTENDED WELL TEST, MAXIMUM EFFICENCY RATE AND DRILL STEM TEST
+                </p>
+            </div>
+
+        </div>
+        <br />
+        <hr />
+
+        <br />
+
+        <div class="text-center">
+
+            <form action="/Companies/AcceptLegal" method="post">
+                <input type="text" hidden value="@ViewData["cid"]" name="companyid" id="companyid" />
+                <a class="btn btn-success btn-sm text-capitalize" href="/Companies/AcceptLegal/@ViewData["cid"]" id="btnAcceptLegal"> <i class="fas fa-check-circle"></i> Yes, i agree </a>
+                &nbsp;
+                <a class="btn btn-danger btn-sm text-capitalize" href="/Home" id="btnRejectLegal"> <i class="fas fa-stop-circle"></i> No, i don't agree </a>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+

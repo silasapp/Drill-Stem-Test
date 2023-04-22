@@ -1,0 +1,128 @@
+﻿@model IEnumerable<DST.Models.GeneralModel.SearchList>;
+@using DST.Helpers;
+@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["Title"] = "Applications Reports";
+    Layout = "~/Views/Shared/_ElaLayout.cshtml";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+
+<div class="card-black">
+
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <label>Select Type</label>
+            <div class="dropdown-sin-3">
+                <select style="display:none" multiple placeholder="Select" name="txtSelType[]" id="txtSelType">
+                    @foreach (var a in Model.FirstOrDefault().types)
+                    {
+                        <option value="@a.AppTypeId">@a.TypeName</option>
+                    }
+
+                </select>
+            </div>
+            <br />
+        </div>
+
+        <div class="col-sm-6">
+            <label>Select Stage</label>
+            <div class="dropdown-sin-4">
+                <select style="display:none" multiple placeholder="Select" name="txtSelStage[]" id="txtSelStage">
+                    @foreach (var a in Model.FirstOrDefault().stages)
+                    {
+                        <option value="@a.AppStageId">@a.StageName</option>
+                    }
+
+                </select>
+            </div>
+            <br />
+        </div>
+
+        <div class="col-sm-6">
+            <label>Select Application Status</label>
+            <div class="dropdown-sin-5">
+                <select style="display:none" multiple placeholder="Select" name="txtSelStatus[]" id="txtSelStatus">
+                    <option value="@GeneralClass.Processing">@GeneralClass.Processing</option>
+                    <option value="@GeneralClass.Approved">@GeneralClass.Approved</option>
+                    <option value="@GeneralClass.Rejected">@GeneralClass.Rejected</option>
+                    <option value="@GeneralClass.PaymentPending">@GeneralClass.PaymentPending</option>
+                    <option value="@GeneralClass.PaymentCompleted">@GeneralClass.PaymentCompleted</option>
+                    <option value="@GeneralClass.DocumentsRequired">@GeneralClass.DocumentsRequired</option>
+                    <option value="@GeneralClass.DocumentsUploaded">@GeneralClass.DocumentsUploaded</option>
+                    <option value="@GeneralClass.ResultSubmitted">@GeneralClass.ResultSubmitted</option>
+                    <option value="@GeneralClass.DISAPPROVE">@GeneralClass.DISAPPROVE</option>
+                    <option value="@GeneralClass.Withdrawn">@GeneralClass.Withdrawn</option>
+                </select>
+            </div>
+            <br />
+        </div>
+
+       
+
+        <div class="col-sm-3">
+            <label for="comment">Select Date From :</label>
+            <br />
+            <input type="text" class="form-control" id="txtApplicationReportFrom" value="" />
+        </div>
+
+        <div class="col-sm-3">
+            <label for="comment">Select Date To :</label>
+            <br />
+            <input type="text" class="form-control" id="txtApplicationReportTo" value="" />
+        </div>
+
+
+        <div class="col-sm-1">
+            <label><br /></label>
+            <button class="btn btn-primary" id="btnApplicationReportSearch"><i class="fas fa-search"> </i> Search</button>
+        </div>
+
+    </div>
+
+    <h2 class="">Your Selected Search Results </h2>
+    <hr />
+    <br />
+
+    <div class="table-responsive">
+
+        <button id='btnRtable1' class="btn btn-danger btn-sm">Export Excel</button>
+
+        <p></p>
+
+        <table class="table table-bordered table-hover" id="SearchTabless" style="font-size:10px">
+
+            <thead>
+                <tr>
+                    <th>Reference NO</th>
+                    <th>Company</th>
+                    <th>Facility</th>
+                    <th>Type</th>
+                    <th>Stage</th>
+                    <th>Status</th>
+                    <th>Current Desk</th>
+                    <th>State</th>
+                    <th>LGA</th>
+                    <th>Date Applied</th>
+                    <th>Date Submitted</th>
+                    <th>Wells</th>
+                    <th>Reserviors</th>
+                    <th>Fields</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>

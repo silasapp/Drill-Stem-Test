@@ -1,0 +1,198 @@
+﻿@using DST.Helpers;
+@using DST.HelpersClass;
+@model IEnumerable<DST.Models.GeneralModel.PermitViewModel>;
+
+@{
+    ViewData["Title"] = ViewData["PermitDocumentName"];
+    Layout = null;
+    NumberToWordHelper numberToWord = new NumberToWordHelper();
+    var half = "";
+
+    half = Model.FirstOrDefault().permitModels.FirstOrDefault().Month > 6 ? "Second Half" : "First Half";
+
+    var totalVol = Model.FirstOrDefault().permitModels.FirstOrDefault()?.Volume + Model.FirstOrDefault().PreviousPermitModels.FirstOrDefault()?.Volume;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+</head>
+<body style="">
+
+    <div style="padding:0px; color:black">
+
+        <div style="width:100%;" id="divPermitPreview">
+
+            <div class="text-center">
+
+
+                <div style="font-family: 'Arial Black'; font-weight: bold; line-height: 30px ">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:20%;">
+                                <img src="~/images/nuprc.png" alt="Logo" style="height: 150px; display: block; margin: 0 auto" />
+                            </td>
+                            <td style="width:75%;" valign="top">
+                                <div style="font-size:30px; font-weight:bold; color:forestgreen; margin-top:15px; margin-left:25px; line-height:37px">
+                                    NIGERIAN UPSTREAM PETROLEUM REGULATORY COMMISSION (NUPRC)
+                                </div>
+                                <br />
+                                <div style="font-family: Calibri; font-size: 13px; margin-left: 25px; font-weight: normal">
+                                    <span>No 7, Sylvester Ugoh Crescent Jabi, Abuja FCT | </span>
+                                    <span>PMB : 399 Garki, Abuja | </span>
+                                    <span>Phone : +234(0)9032000 | </span>
+                                    <span>Email : nuprc@nuprc.gov.ng | </span>
+                                    <span>Web : www.nuprc.gov.ng </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <p></p>
+
+                <div style="margin:0px 30px 0px 30px; padding:10px;" class="text-left">
+
+                    <table style="width: 100%; border-spacing: 0;">
+                        <tr style="font-size:17px;">
+                            <td style="width:60%%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Ref. No:</p>
+                                    &nbsp;<span style="font-family: Calibri;"><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().PermitNO</b></span>
+                                </div>
+                            </td>
+                            <td style="width:40%;" valign="top">
+                                <div style="padding: 5px 0 0;">
+                                    <p style="display: inline-block; margin-bottom: -3px; background-color: #FFF; padding: 3px 10px 3px 0;">Date:</p>
+                                    &nbsp;<span style="font-family: Calibri;">@Model.FirstOrDefault().permitModels.FirstOrDefault().IssuedDate.ToString()</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <br />
+
+                    <div style="font-family:Candara; font-size:16px;">
+
+                        <div>The Managing Director,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyAddress,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyCity,</div>
+                        <div>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyState.</div>
+
+                        <br />
+
+                        <p>Dear Sir,</p>
+
+                        <div>
+                            <sanp style="font-weight:bold; text-decoration:underline;">REQUEST FOR OFF-CYCLE TECHNICAL ALLOWABLE RATES (TAR) FOR FIELD (@Model.FirstOrDefault().permitModels.FirstOrDefault().FieldNames) </sanp>
+
+                            <p></p>
+
+                            <div style="line-height:38px; font-size:17px;">
+
+                                <p>
+                                    Reference is made to your letter <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().RefNo</b> dated <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().DateSubmitted?.ToShortDateString()</b> on the above subject.
+                                </p>
+
+
+                                <p>
+                                    After a careful review of your submission, we wish to inform you that an additional <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().Volume</b> bopd Technical Allowable Rate (TAR) has been approved for your company following the analysis of the MER test results submitted for <b>@numberToWord.NumberToWords(Convert.ToDouble(Model.FirstOrDefault().permitModels.FirstOrDefault()?.TotalField)) (@Model.FirstOrDefault().permitModels.FirstOrDefault()?.TotalField)</b> of your EA Field wells.
+                                </p>
+
+                                <p>
+                                    This brings the total 1H2021 TAR for <b> @Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName </b> to <b> @totalVol </b> bopd as against the <b>@Model.FirstOrDefault().PreviousPermitModels.FirstOrDefault()?.Volume</b> bopd earlier communicated vide our letter <b>@Model.FirstOrDefault().PreviousPermitModels.FirstOrDefault()?.PermitNO</b> dated <b>@Model.FirstOrDefault().PreviousPermitModels.FirstOrDefault()?.IssuedDate</b>.
+                                </p>
+
+                                <p>
+                                    However, based on the OPEC restriction on oil production, you are required to strictly adhere to the oil production quota of <b>@Model.FirstOrDefault().PreviousPermitModels.FirstOrDefault()?.Volume</b> bopd as previously advised for  <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().CompanyName</b>. Please note that this restriction is on oil production only and should subsist until there is a review and you are further advised.
+                                </p>
+
+                                <p>
+                                    We reiterate here that Allowable is not transferable and that the individual well rate represents the maximum daily production from each well.
+                                </p>
+
+                                <p>
+                                    <b> It is to be noted that apart from wells currently on approved test, any well not listed in the attached schedule should on no account be re-opened for production without permission from the Director/CEO, Nigerian Upstream Petroleum Regulator Commission.</b>
+                                </p>
+
+                                <br /><br /><br />
+
+                                <p>
+                                    We acknowledge receipt of your e-payment with Remita Retrieval Reference (RRR) number <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().RRR</b> dated <b>@Model.FirstOrDefault().permitModels.FirstOrDefault().DatePaid</b>, of <b>@numberToWord.NumberToWords(Convert.ToDouble(Model.FirstOrDefault().permitModels.FirstOrDefault()?.TotalAmount))</b> Naira <b>(@string.Format("{0:N}", Model.FirstOrDefault().permitModels.FirstOrDefault()?.TotalAmount))</b> only being payment for supplementry TAR.
+                                </p>
+
+                                <br />
+
+                                <table style="width: 100%; border-spacing: 0;">
+                                    <tr style="font-size:17px;">
+                                        <td style="width: 66.666%;" valign="top">
+                                            <div>
+                                                Yours faithfully,
+
+                                                <br />
+
+                                                <img src="~/images/Signature/@Model.FirstOrDefault().permitModels.FirstOrDefault().Signature" style="height: 70px;" />
+
+                                                <br />
+
+                                                <div style="line-height:30px; font-size:16px">
+                                                    <span><b>@Model.FirstOrDefault().permitModels.FirstOrDefault().ApprovedBy</b></span>,
+                                                    <br />
+                                                    <span><b>For: Commission Chief Executive (CCE), (NUPRC)</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td style="width: 33.333%;" valign="top">
+                                            <div class="text-center">
+                                                <img style="height:90px" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.FirstOrDefault().permitModels.FirstOrDefault().QrCode))" />
+
+                                                <br />
+                                                <small style="font-size:12px">Scan to verify</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
+
+
+
+<style>
+
+    #List1 li {
+        display: inline-block;
+        text-align: left;
+    }
+
+    #divPermitPreview {
+        background: url("/images/nupp.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+</style>
